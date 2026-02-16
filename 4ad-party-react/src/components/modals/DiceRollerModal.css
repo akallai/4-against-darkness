@@ -1,34 +1,48 @@
 .dice-controls {
   display: flex;
+  flex-direction: column;
   gap: 10px;
   align-items: center;
   margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-
-.dice-col-settings {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.dice-row-selects {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.dice-row-selects select {
-  width: 60px;
 }
 
 .dice-buttons {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .dice-col-btn {
   min-width: 60px;
+}
+
+.dice-col-btn.dice-exploding-active {
+  box-shadow: 0 0 8px var(--global-accent), inset 0 0 4px rgba(212, 175, 55, 0.2);
+  border-color: var(--global-accent);
+}
+
+.dice-exploding-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-color, #999);
+  font-size: 0.8em;
+  padding: 3px 12px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.dice-exploding-toggle:hover {
+  opacity: 0.85;
+}
+
+.dice-exploding-toggle.active {
+  opacity: 1;
+  color: var(--global-accent);
+  border-color: var(--global-accent);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
 }
 
 .dice-result-area {
