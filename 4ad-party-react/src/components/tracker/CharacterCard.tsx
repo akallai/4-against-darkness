@@ -35,7 +35,14 @@ export function CharacterCard({ index, character }: CharacterCardProps) {
   }
 
   const changeLvl = (delta: number) => {
-    update({ lvl: Math.max(0, character.lvl + delta) })
+    const newLvl = Math.max(0, character.lvl + delta)
+    if (newLvl === character.lvl) return
+    const newMax = maxHp + delta
+    const newCurrent = currentHp + delta
+    update({
+      lvl: newLvl,
+      hp: `${Math.max(0, newCurrent)}/${Math.max(0, newMax)}`,
+    })
   }
 
   return (
