@@ -255,6 +255,11 @@ body.classic-mode .list-header {
   margin-bottom: 5px !important;
 }
 
+body.classic-mode .list-title,
+body.classic-mode .list-count {
+  color: #fff !important;
+}
+
 body.classic-mode label {
   color: var(--classic-accent) !important;
   font-weight: bold;
