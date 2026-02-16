@@ -1,0 +1,112 @@
+.editable-list {
+  margin-bottom: 4px;
+}
+
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 8px;
+  background: rgba(212, 175, 55, 0.15);
+  border-left: 3px solid var(--global-accent);
+  border-radius: 2px;
+  margin-bottom: 2px;
+}
+
+.list-title {
+  font-size: 0.7em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--global-accent);
+}
+
+.list-count {
+  font-size: 0.65em;
+  color: var(--global-accent);
+  opacity: 0.7;
+}
+
+.list-rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-group {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.list-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.btn-toggle-item {
+  background: none;
+  border: none;
+  color: var(--global-accent);
+  cursor: pointer;
+  font-size: 0.6em;
+  padding: 2px 4px;
+  min-width: 18px;
+}
+
+.list-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--row-line);
+  color: var(--text-color);
+  font-size: 0.8em;
+  padding: 3px 4px;
+  outline: none;
+}
+
+.list-input:focus {
+  border-bottom-color: var(--global-accent);
+}
+
+.btn-list-action {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 0.7em;
+  padding: 2px 4px;
+}
+
+.btn-list-action:hover {
+  color: #f44;
+}
+
+.list-details {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  border-left: 2px solid var(--border);
+  color: var(--text-color);
+  font-size: 0.75em;
+  padding: 4px 8px;
+  margin: 2px 0 4px 22px;
+  resize: none;
+  font-family: var(--font-stack);
+}
+
+.btn-list-add {
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--global-accent);
+  cursor: pointer;
+  font-size: 0.7em;
+  padding: 3px 8px;
+  width: 100%;
+  border-radius: 2px;
+  margin-top: 2px;
+}
+
+.btn-list-add:hover {
+  border-color: var(--global-accent);
+  background: rgba(212, 175, 55, 0.05);
+}

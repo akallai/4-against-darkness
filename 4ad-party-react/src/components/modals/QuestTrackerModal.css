@@ -1,0 +1,114 @@
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.quest-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.quest-card.completed {
+  opacity: 0.6;
+}
+
+.quest-card.failed {
+  opacity: 0.5;
+  border-color: #833;
+}
+
+.quest-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.quest-title {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--global-accent);
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.quest-status-select {
+  width: auto;
+  font-size: 0.7em;
+  padding: 2px 6px;
+}
+
+.quest-body {
+  padding: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.quest-meta {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.quest-meta-item {
+  flex: 1;
+}
+
+.quest-meta-item label {
+  display: block;
+  font-size: 0.65em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.quest-meta-item input {
+  width: 100%;
+  font-size: 0.85em;
+}
+
+.quest-desc {
+  width: 100%;
+  font-size: 0.85em;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px;
+  color: var(--text-color);
+  resize: none;
+  font-family: var(--font-stack);
+}
+
+.quest-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quest-task-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.quest-task-input {
+  flex: 1;
+  font-size: 0.85em;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--row-line);
+  color: var(--text-color);
+  padding: 2px 4px;
+}
+
+.quest-task-input.done {
+  text-decoration: line-through;
+  opacity: 0.5;
+}

@@ -1,0 +1,18 @@
+{
+  "name": "The Proper Party Portfolio",
+  "short_name": "4AD Party",
+  "description": "Companion app for Four Against Darkness tabletop RPG",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141414",
+  "theme_color": "#1a1a1a",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/dungeon_dark.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}

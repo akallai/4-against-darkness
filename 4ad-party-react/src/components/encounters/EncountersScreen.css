@@ -1,0 +1,24 @@
+.encounters-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.encounters-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.encounters-footer {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  padding: 8px;
+  background: var(--bg-color);
+  border-top: 1px solid var(--border);
+}

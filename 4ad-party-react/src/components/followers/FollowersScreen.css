@@ -1,0 +1,45 @@
+.followers-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.followers-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 10px;
+  flex: 1;
+  overflow-y: auto;
+  align-content: start;
+}
+
+.hireling-column,
+.beast-column-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.follower-col-header {
+  color: var(--global-accent);
+  font-size: 0.9em;
+  margin: 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.followers-footer {
+  display: flex;
+  justify-content: center;
+  padding: 8px;
+  background: var(--bg-color);
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .followers-layout {
+    grid-template-columns: 1fr;
+  }
+}

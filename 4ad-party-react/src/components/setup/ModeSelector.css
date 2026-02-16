@@ -1,0 +1,29 @@
+.mode-selector {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.mode-btn {
+  background: var(--btn-bg);
+  border: 1px solid var(--border);
+  color: var(--text-color);
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: var(--font-stack);
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+.mode-btn.active {
+  border-color: var(--global-accent);
+  color: var(--global-accent);
+  background: var(--btn-hover);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.15);
+}
+
+.mode-btn:hover {
+  border-color: var(--global-accent);
+}

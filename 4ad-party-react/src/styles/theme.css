@@ -1,0 +1,300 @@
+/* ==========================================================================
+   1. ROOT VARIABLES & GLOBAL RESETS
+   ========================================================================== */
+:root {
+  --bg-color: #141414;
+  --card-bg: #2d2d2d;
+  --text-color: #e0e0e0;
+  --global-accent: #d4af37;
+  --border: #444;
+  --row-line: #555;
+  --input-bg: #333;
+  --btn-bg: transparent;
+  --btn-hover: rgba(212, 175, 55, 0.15);
+  --font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: var(--font-stack);
+  background-color: transparent;
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 16px;
+  overscroll-behavior: none;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--global-accent);
+}
+
+/* ==========================================================================
+   CLASSIC MODE THEME
+   ========================================================================== */
+body.classic-mode {
+  --classic-bg: #1e1b18;
+  --classic-paper: #f4e4bc;
+  --classic-paper-dark: #dcc89a;
+  --classic-ink: #2b2622;
+  --classic-accent: #7a0909;
+  --classic-border: #4a3728;
+  --classic-metal: #707070;
+  --classic-text: #1a1a1a;
+  --classic-gold: #d4af37;
+  --global-accent: var(--classic-accent) !important;
+  background-color: var(--classic-bg) !important;
+  background-image:
+    radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.4) 100%),
+    repeating-linear-gradient(45deg, #222 0, #222 1px, transparent 0, transparent 50%) !important;
+  background-size: 100% 100%, 10px 10px;
+}
+
+body.classic-mode .app-background {
+  background-image: url('/tavern_background.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  opacity: 1 !important;
+}
+
+/* Parchment Theme Backgrounds */
+body.classic-mode .journal-entry,
+body.classic-mode .npc-card,
+body.classic-mode .encounter-card,
+body.classic-mode .f-card,
+body.classic-mode .mount-card,
+body.classic-mode .modal-content,
+body.classic-mode .enc-dice-panel,
+body.classic-mode .replacement-form {
+  background-color: var(--classic-paper) !important;
+  background-image: url('/parchment_texture.jpg') !important;
+  background-size: cover !important;
+  border: 2px solid var(--classic-border) !important;
+  color: var(--classic-text) !important;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 2px !important;
+}
+
+/* Intricate Gold Borders */
+body.classic-mode .char-card,
+body.classic-mode .summ-card,
+body.classic-mode .stat-stack-item,
+body.classic-mode .char-input-group,
+body.classic-mode .tavern-compact-box,
+body.classic-mode .replacement-form {
+  background-color: var(--classic-paper) !important;
+  background-image: url('/parchment_texture.jpg') !important;
+  background-size: cover !important;
+  color: var(--classic-ink) !important;
+  border: 3px double rgba(160, 120, 60, 0.6) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+  position: relative;
+  z-index: 1;
+  border-image: none !important;
+  clip-path: none !important;
+}
+
+body.classic-mode .char-card::after,
+body.classic-mode .char-input-group::after,
+body.classic-mode .tavern-compact-box::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    radial-gradient(circle at 0 0, var(--classic-gold) 3px, transparent 4px),
+    radial-gradient(circle at 100% 0, var(--classic-gold) 3px, transparent 4px),
+    radial-gradient(circle at 100% 100%, var(--classic-gold) 3px, transparent 4px),
+    radial-gradient(circle at 0 100%, var(--classic-gold) 3px, transparent 4px);
+  background-size: 8px 8px;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  border: none !important;
+}
+
+body.classic-mode .char-card::before,
+body.classic-mode .char-input-group::before,
+body.classic-mode .tavern-compact-box::before {
+  display: none !important;
+}
+
+/* Classic Buttons */
+body.classic-mode .btn-main,
+body.classic-mode .btn-secondary,
+body.classic-mode .btn-journal-gold,
+body.classic-mode .btn-gold-dashed,
+body.classic-mode .setup-footer-btn,
+body.classic-mode .btn-oracle,
+body.classic-mode .btn-dice,
+body.classic-mode .btn-fs {
+  background-color: var(--classic-accent) !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4) !important;
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+
+body.classic-mode .btn-main:active {
+  box-shadow: 0px 0px 0px #000;
+  transform: translate(2px, 2px);
+}
+
+/* Classic Headers and Text */
+body.classic-mode h2,
+body.classic-mode h3,
+body.classic-mode .entry-title,
+body.classic-mode .btn-edit,
+body.classic-mode .arrow-btn,
+body.classic-mode .btn-toggle-item,
+body.classic-mode .btn-list-action {
+  color: var(--classic-accent) !important;
+}
+
+body.classic-mode .char-name,
+body.classic-mode .summ-name {
+  font-size: 1.0em !important;
+  font-family: 'Times New Roman', serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-weight: bold !important;
+  color: var(--classic-accent) !important;
+}
+
+body.classic-mode .char-class {
+  font-size: 0.75em !important;
+  color: #333 !important;
+  font-style: italic;
+  white-space: nowrap !important;
+}
+
+/* Classic Inputs */
+body.classic-mode input,
+body.classic-mode textarea,
+body.classic-mode select {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border: 1px solid var(--classic-border) !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+body.classic-mode .char-card .stat-input,
+body.classic-mode .char-card .list-input {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.classic-mode .stat-input {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-weight: bold !important;
+  color: #000 !important;
+}
+
+/* Classic Stat Boxes */
+body.classic-mode .stat-box {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border: 2px solid var(--classic-border) !important;
+  border-radius: 0 !important;
+  box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+body.classic-mode .stat-box label {
+  color: var(--classic-ink) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Classic List Headers */
+body.classic-mode .list-header {
+  background: var(--classic-accent) !important;
+  color: #fff !important;
+  border: none !important;
+  clip-path: polygon(0% 0%, 95% 0%, 100% 50%, 95% 100%, 0% 100%);
+  padding-left: 8px !important;
+  padding-right: 25px !important;
+  margin-bottom: 5px !important;
+}
+
+body.classic-mode label {
+  color: var(--classic-accent) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+body.classic-mode .circle-check {
+  border: 1px solid var(--classic-border) !important;
+  border-radius: 2px !important;
+}
+
+body.classic-mode .circle-check:checked {
+  background-color: var(--classic-accent) !important;
+}
+
+body.classic-mode .modal-content {
+  color: #1a1a1a !important;
+}
+
+body.classic-mode .modal-content span,
+body.classic-mode .modal-content h3 {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Donation Modal Buttons */
+.donate-option-btn {
+  display: block;
+  background: var(--input-bg);
+  color: var(--text-color);
+  text-decoration: none;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.9em;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.donate-option-btn:hover {
+  background: var(--btn-hover);
+  border-color: var(--global-accent);
+  color: var(--global-accent);
+}

@@ -1,0 +1,143 @@
+.encounter-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.encounter-card.completed {
+  opacity: 0.7;
+}
+
+.enc-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.enc-type {
+  flex: 1;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.enc-category {
+  font-size: 0.7em;
+  color: #999;
+  text-transform: uppercase;
+}
+
+.enc-status-badge {
+  font-size: 0.7em;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.enc-status-badge.active {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--global-accent);
+  border: 1px solid var(--global-accent);
+}
+
+.enc-status-badge.done {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  border: 1px solid #4caf50;
+}
+
+.enc-body {
+  padding: 8px;
+}
+
+.enc-ribbon {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.enc-ribbon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 50px;
+  padding: 4px;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.enc-ribbon-item:last-child {
+  border-right: none;
+}
+
+.enc-ribbon-item label {
+  font-size: 0.6em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+}
+
+.enc-tiny-input,
+.enc-wide-input {
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--row-line);
+  color: var(--text-color);
+  font-size: 0.85em;
+  padding: 2px;
+}
+
+.enemy-pip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.enemy-pip-label {
+  cursor: pointer;
+}
+
+.enemy-check-input {
+  display: none;
+}
+
+.enemy-pip {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  transition: all 0.15s;
+}
+
+.enemy-pip.defeated {
+  background-color: var(--global-accent);
+  border-color: var(--global-accent);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+}
+
+.enc-notes {
+  width: 100%;
+  font-size: 0.8em;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px;
+  color: var(--text-color);
+  resize: none;
+  margin-bottom: 8px;
+  font-family: var(--font-stack);
+}
+
+.enc-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}

@@ -1,0 +1,45 @@
+.journal-entry {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.journal-entry.collapsed {
+  padding-bottom: 0;
+}
+
+.entry-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.entry-header:hover {
+  background: rgba(212, 175, 55, 0.05);
+}
+
+.entry-title {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--global-accent);
+  font-weight: bold;
+  font-size: 0.9em;
+  padding: 0;
+}
+
+.entry-content {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 0.85em;
+  resize: none;
+  min-height: 60px;
+  font-family: var(--font-stack);
+}

@@ -1,0 +1,92 @@
+.f-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.f-card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.f-card-header input {
+  flex: 1;
+  font-weight: bold;
+}
+
+.f-card-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.f-card-row input {
+  flex: 1;
+}
+
+.f-small-input {
+  max-width: 70px;
+}
+
+.f-notes {
+  width: 100%;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px;
+  color: var(--text-color);
+  resize: none;
+  font-family: var(--font-stack);
+}
+
+.f-stat-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.f-stat-row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.65em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.f-stat-row input {
+  padding: 2px 4px;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.animal-slot,
+.mount-slot {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.animal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.mount-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+@media (max-width: 600px) {
+  .mount-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}

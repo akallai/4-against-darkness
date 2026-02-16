@@ -1,0 +1,68 @@
+.npc-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.npc-card.collapsed {
+  padding-bottom: 0;
+}
+
+.npc-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+}
+
+.npc-name-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-weight: bold;
+  font-size: 0.85em;
+  padding: 0;
+}
+
+.npc-body {
+  padding: 6px 8px;
+  border-top: 1px solid var(--border);
+}
+
+.npc-stats-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.npc-stats-row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.6em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.npc-stats-row input {
+  padding: 2px 4px;
+  font-size: 1.3em;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--row-line);
+  color: var(--text-color);
+  text-align: center;
+}
+
+.npc-details {
+  width: 100%;
+  font-size: 0.8em;
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  resize: none;
+  font-family: var(--font-stack);
+}

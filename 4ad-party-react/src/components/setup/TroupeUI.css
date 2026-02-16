@@ -1,0 +1,63 @@
+.troupe-ui {
+  margin: 15px 0;
+}
+
+.troupe-slots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.troupe-slot {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.troupe-slot label {
+  display: block;
+  font-size: 0.75em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.troupe-slot select {
+  width: 100%;
+}
+
+.troupe-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.roster-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.roster-chip {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.roster-chip:hover {
+  background: var(--btn-hover);
+}
+
+@media (max-width: 600px) {
+  .troupe-slots {
+    grid-template-columns: 1fr;
+  }
+}

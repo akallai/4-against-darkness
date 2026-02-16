@@ -1,0 +1,55 @@
+.combat-tools-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--bg-color);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.combat-tools-left,
+.combat-tools-right {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.kill-counter-control {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.8em;
+}
+
+.counter-label {
+  font-size: 0.7em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.counter-value {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.counter-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--global-accent);
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.counter-btn:hover {
+  border-color: var(--global-accent);
+}

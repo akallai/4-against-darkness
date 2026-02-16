@@ -1,0 +1,69 @@
+.dice-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.dice-col-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dice-row-selects {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dice-row-selects select {
+  width: 60px;
+}
+
+.dice-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.dice-col-btn {
+  min-width: 60px;
+}
+
+.dice-result-area {
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+}
+
+.dice-col-result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 20px;
+  min-width: 80px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dice-res-total {
+  font-size: 2em;
+  font-weight: bold;
+  color: var(--global-accent);
+}
+
+.dice-res-detail {
+  font-size: 0.75em;
+  color: #999;
+  margin-top: 4px;
+}
+
+.dice-res-label {
+  font-size: 0.65em;
+  color: #666;
+  text-transform: uppercase;
+  margin-top: 4px;
+}

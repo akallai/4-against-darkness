@@ -1,0 +1,67 @@
+.save-slot-manager {
+  margin: 15px 0;
+}
+
+.party-name-row {
+  margin-bottom: 10px;
+}
+
+.party-name-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1em;
+  text-align: center;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text-color);
+  border-radius: 5px;
+}
+
+.party-name-input:focus {
+  border-color: var(--global-accent);
+  outline: none;
+}
+
+.save-slots-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.save-slots-select {
+  flex: 1;
+  min-width: 150px;
+}
+
+.slot-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.data-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .save-slots-row {
+    flex-direction: column;
+  }
+
+  .save-slots-select {
+    width: 100%;
+  }
+
+  .slot-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .data-buttons {
+    flex-direction: column;
+  }
+}

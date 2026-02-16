@@ -1,0 +1,53 @@
+.pip-row {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--global-accent);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.pip-used {
+  background-color: var(--global-accent);
+}
+
+.btn-header-tiny {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--global-accent);
+  cursor: pointer;
+  font-size: 0.8em;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.btn-header-tiny.active-edit {
+  border-color: var(--global-accent);
+  background: rgba(212, 175, 55, 0.15);
+}
+
+.pip-edit-controls {
+  display: flex;
+  gap: 2px;
+}
+
+.pip-edit-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--global-accent);
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7em;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
