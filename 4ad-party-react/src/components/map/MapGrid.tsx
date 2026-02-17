@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useRef } from 'react'
 import { useMapStore } from '@/stores/useMapStore'
 import { MAP_COLS, MAP_ROWS } from '@/types/map'
-import type { DoorSide } from '@/types/map'
+import type { DoorSide, WallOpeningType } from '@/types/map'
 import { stampTile } from '@/utils/mapGeometry'
 import { getTileById } from '@/data/tileTemplates'
 import './MapGrid.css'
@@ -19,7 +19,7 @@ export function MapGrid() {
   const placeTile = useMapStore((s) => s.placeTile)
   const drawCell = useMapStore((s) => s.drawCell)
   const eraseCell = useMapStore((s) => s.eraseCell)
-  const toggleDoor = useMapStore((s) => s.toggleDoor)
+  const toggleOpening = useMapStore((s) => s.toggleOpening)
   const addLabel = useMapStore((s) => s.addLabel)
   const deleteLabel = useMapStore((s) => s.deleteLabel)
   const removePlacedTile = useMapStore((s) => s.removePlacedTile)
@@ -37,13 +37,13 @@ export function MapGrid() {
     return set
   }, [mapData.cells])
 
-  // Build door lookup map
+  // Build door lookup map: cell key → Map<side, openingType>
   const doorMap = useMemo(() => {
-    const map = new Map<string, Set<DoorSide>>()
+    const map = new Map<string, Map<DoorSide, WallOpeningType>>()
     for (const d of mapData.doors) {
       const key = `${d.col},${d.row}`
-      if (!map.has(key)) map.set(key, new Set())
-      map.get(key)!.add(d.side)
+      if (!map.has(key)) map.set(key, new Map())
+      map.get(key)!.set(d.side, d.type ?? 'door')
     }
     return map
   }, [mapData.doors])
@@ -82,9 +82,9 @@ export function MapGrid() {
         pushUndoForDraw()
         setIsDrawing(true)
         eraseCell(col, row)
-      } else if (activeTool === 'door') {
+      } else if (activeTool === 'door' || activeTool === 'passage') {
         const side = getDoorSideFromClick(e)
-        toggleDoor(col, row, side)
+        toggleOpening(col, row, side, activeTool === 'door' ? 'door' : 'passage')
       } else if (activeTool === 'label') {
         const existingLabels = labelMap.get(`${col},${row}`)
         if (existingLabels && existingLabels.length > 0) {
@@ -105,7 +105,7 @@ export function MapGrid() {
         }
       }
     },
-    [activeTool, selectedTemplateId, placeTile, drawCell, eraseCell, toggleDoor, addLabel, deleteLabel, removePlacedTile, pushUndoForDraw, setIsDrawing, labelMap, mapData.placedTiles],
+    [activeTool, selectedTemplateId, placeTile, drawCell, eraseCell, toggleOpening, addLabel, deleteLabel, removePlacedTile, pushUndoForDraw, setIsDrawing, labelMap, mapData.placedTiles],
   )
 
   const handleCellMouseEnter = useCallback(
@@ -147,7 +147,7 @@ export function MapGrid() {
           if (c === 0 || !cellSet.has(`${c - 1},${r}`)) wallClasses += ' wall-left'
         }
 
-        // Door class overrides
+        // Opening class overrides (both doors and passages create a gap in the wall)
         let doorClasses = ''
         if (doors) {
           if (doors.has('top')) doorClasses += ' door-top'
@@ -163,8 +163,10 @@ export function MapGrid() {
             onMouseDown={(e) => handleCellMouseDown(c, r, e)}
             onMouseEnter={() => handleCellMouseEnter(c, r)}
           >
-            {doors && Array.from(doors).map((side) => (
-              <span key={side} className={`door-marker door-marker-${side}`} />
+            {doors && Array.from(doors.entries()).map(([side, type]) => (
+              type === 'door'
+                ? <span key={side} className={`door-marker door-marker-${side}`} />
+                : <span key={side} className={`passage-marker passage-marker-${side}`} />
             ))}
             {labels?.map((l) => (
               <span

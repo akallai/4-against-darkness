@@ -24,6 +24,7 @@ export function mirrorGrid(
     col: width - 1 - d.col,
     row: d.row,
     side: mirrorSide(d.side),
+    ...(d.type ? { type: d.type } : {}),
   }))
   return { cells: mirrored, doors: mirroredDoors }
 }
@@ -56,6 +57,7 @@ export function rotateGrid90(
     col: height - 1 - d.row,
     row: d.col,
     side: rotateSide90(d.side),
+    ...(d.type ? { type: d.type } : {}),
   }))
   return { cells: rotated, doors: rotatedDoors, width: newWidth, height: newHeight }
 }
@@ -129,7 +131,7 @@ export function stampTile(
     const col = originCol + d.col
     const row = originRow + d.row
     if (col >= 0 && col < MAP_COLS && row >= 0 && row < MAP_ROWS) {
-      absDoors.push({ col, row, side: d.side })
+      absDoors.push({ col, row, side: d.side, ...(d.type ? { type: d.type } : {}) })
     }
   }
 

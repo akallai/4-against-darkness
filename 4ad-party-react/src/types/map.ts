@@ -1,9 +1,11 @@
 export type DoorSide = 'top' | 'right' | 'bottom' | 'left'
+export type WallOpeningType = 'door' | 'passage'
 
 export interface TileDoor {
   col: number
   row: number
   side: DoorSide
+  type?: WallOpeningType
 }
 
 export interface TileTemplate {
@@ -28,6 +30,7 @@ export interface AbsoluteDoor {
   col: number
   row: number
   side: DoorSide
+  type?: WallOpeningType
 }
 
 export interface PlacedTile {
@@ -49,7 +52,7 @@ export interface MapLabel {
   color?: string
 }
 
-export type MapTool = 'place' | 'draw' | 'erase' | 'door' | 'label' | 'select'
+export type MapTool = 'place' | 'draw' | 'erase' | 'door' | 'passage' | 'label' | 'select'
 
 export interface MapData {
   cells: GridCoord[]

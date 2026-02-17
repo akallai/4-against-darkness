@@ -7,6 +7,7 @@ const TOOLS: { key: MapTool; label: string }[] = [
   { key: 'draw', label: 'Draw' },
   { key: 'erase', label: 'Erase' },
   { key: 'door', label: 'Door' },
+  { key: 'passage', label: 'Gate' },
   { key: 'label', label: 'Label' },
   { key: 'select', label: 'Select' },
 ]

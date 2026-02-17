@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { MapData, MapTool, Rotation, GridCoord, AbsoluteDoor, MapLabel } from '@/types/map'
+import type { MapData, MapTool, Rotation, GridCoord, AbsoluteDoor, MapLabel, WallOpeningType } from '@/types/map'
 import { createEmptyMapData } from '@/types/map'
 import type { TileTemplate } from '@/types/map'
 import {
@@ -43,8 +43,8 @@ interface MapState {
   setIsDrawing: (val: boolean) => void
   pushUndoForDraw: () => void
 
-  // Door operations
-  toggleDoor: (col: number, row: number, side: AbsoluteDoor['side']) => void
+  // Door/passage operations
+  toggleOpening: (col: number, row: number, side: AbsoluteDoor['side'], type: WallOpeningType) => void
 
   // Label operations
   addLabel: (col: number, row: number, text: string, color?: string) => void
@@ -176,16 +176,24 @@ export const useMapStore = create<MapState>()((set, get) => ({
     set({ undoStack: pushUndo(state.undoStack, state.mapData) })
   },
 
-  toggleDoor: (col, row, side) => {
+  toggleOpening: (col, row, side, type) => {
     const state = get()
     const idx = state.mapData.doors.findIndex(
       (d) => d.col === col && d.row === row && d.side === side,
     )
     const newDoors = [...state.mapData.doors]
     if (idx >= 0) {
-      newDoors.splice(idx, 1)
+      const existing = newDoors[idx]!
+      const existingType = existing.type ?? 'door'
+      if (existingType === type) {
+        // Same type → remove
+        newDoors.splice(idx, 1)
+      } else {
+        // Different type → replace
+        newDoors[idx] = { col, row, side, type }
+      }
     } else {
-      newDoors.push({ col, row, side })
+      newDoors.push({ col, row, side, type })
     }
     set({
       undoStack: pushUndo(state.undoStack, state.mapData),

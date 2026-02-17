@@ -108,6 +108,49 @@
   width: 3px;
 }
 
+/* Passage marker elements — no visible bar, just the gap in the wall.
+   A subtle dotted line hints at the opening without looking like a door. */
+.passage-marker {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  border-style: dotted;
+  border-color: var(--map-wall-color);
+  opacity: 0.4;
+}
+
+.passage-marker-top {
+  top: -3px;
+  left: 10%;
+  right: 10%;
+  height: 0;
+  border-top-width: 1px;
+}
+
+.passage-marker-right {
+  right: -3px;
+  top: 10%;
+  bottom: 10%;
+  width: 0;
+  border-right-width: 1px;
+}
+
+.passage-marker-bottom {
+  bottom: -3px;
+  left: 10%;
+  right: 10%;
+  height: 0;
+  border-bottom-width: 1px;
+}
+
+.passage-marker-left {
+  left: -3px;
+  top: 10%;
+  bottom: 10%;
+  width: 0;
+  border-left-width: 1px;
+}
+
 /* Labels */
 .map-label {
   position: absolute;
