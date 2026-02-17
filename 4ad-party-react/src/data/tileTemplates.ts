@@ -3,7 +3,6 @@ import type { TileTemplate, TileDoor } from '@/types/map'
 /** Helper to define a tile concisely */
 function tile(
   id: number,
-  name: string,
   category: 'entrance' | 'corridor' | 'room',
   grid: string,
   doors: TileDoor[] = [],
@@ -12,7 +11,7 @@ function tile(
   const rows = grid.split('\n')
   const height = rows.length
   const width = Math.max(...rows.map((r) => r.length))
-  return { id, name, category, grid, width, height, doors, hasStairs }
+  return { id, category, grid, width, height, doors, hasStairs }
 }
 
 // ────────────────────────────────────────────────────────────────
@@ -23,7 +22,7 @@ function tile(
 const ENTRANCE_TILES: TileTemplate[] = [
   // Tile 1: Flat wide rectangular room (6w × 2h).
   // 3 doors on top, 2 doors on bottom center. Stairs inside.
-  tile(1, 'Entrance Hall', 'entrance',
+  tile(1, 'entrance',
     [
       '1111111',
       '1111111',
@@ -43,7 +42,7 @@ const ENTRANCE_TILES: TileTemplate[] = [
   // Tile 2: L-shaped room with upper corridor going up,
   // a small right extension, and lower corridor going down.
   // Door on upper corridor left wall, right extension, and bottom corridor.
-  tile(2, 'Side Entrance', 'entrance',
+  tile(2, 'entrance',
     [
       '001000',
       '101000',
@@ -68,7 +67,7 @@ const ENTRANCE_TILES: TileTemplate[] = [
 
   // Tile 3: Three parallel corridors going upward from a
   // horizontal base. Comb/trident shape. Gates at corridor tops.
-  tile(3, 'Triple Corridor', 'entrance',
+  tile(3, 'entrance',
     [
       '1001001',
       '1001001',
@@ -88,7 +87,7 @@ const ENTRANCE_TILES: TileTemplate[] = [
 
   // Tile 4: Two parallel corridors going upward from a
   // horizontal base. Fork shape. Doors at corridor tops.
-  tile(4, 'Double Corridor', 'entrance',
+  tile(4, 'entrance',
     [
       '10001',
       '10001',
@@ -110,7 +109,7 @@ const ENTRANCE_TILES: TileTemplate[] = [
   // Tile 5: Branching corridors — two upward prongs from a
   // junction, a right branch, and a long corridor going down.
   // Tree-like shape.
-  tile(5, 'Branching Entrance', 'entrance',
+  tile(5, 'entrance',
     [
       '010',
       '010',
@@ -134,7 +133,7 @@ const ENTRANCE_TILES: TileTemplate[] = [
 
   // Tile 6: L-shaped room — wide top section, right portion
   // continues downward. Doors at bottom of the right section.
-  tile(6, 'Grand Entrance', 'entrance',
+  tile(6, 'entrance',
     [
       '111111',
       '001100',
@@ -163,7 +162,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   // ── 11–16: Basic Corridors ──
 
   // 11: Straight vertical corridor, 1 wide, 5 long
-  tile(11, 'Straight Corridor', 'corridor',
+  tile(11, 'corridor',
     [
       '1',
       '1',
@@ -177,7 +176,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 12: Short corridor with a side door
-  tile(12, 'Corridor with Door', 'corridor',
+  tile(12, 'corridor',
     [
       '1',
       '1',
@@ -190,7 +189,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 13: L-shaped corridor bending down then right
-  tile(13, 'L-Corridor', 'corridor',
+  tile(13, 'corridor',
     [
       '1111',
       '0001',
@@ -207,7 +206,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 14: 4-way crossroads
-  tile(14, 'Crossroads', 'corridor',
+  tile(14, 'corridor',
     [
       '111',
       '010',
@@ -225,7 +224,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 15: T-junction (corridor from top, branches left+right)
-  tile(15, 'T-Junction', 'corridor',
+  tile(15, 'corridor',
     [
       '1100',
       '1111',
@@ -240,7 +239,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 16: Long straight corridor, 1 wide, 7 long
-  tile(16, 'Long Corridor', 'corridor',
+  tile(16, 'corridor',
     [
       '111',
       '111',
@@ -257,7 +256,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   // ── 21–26: Corridor Variants ──
 
   // 21: S-bend corridor
-  tile(21, 'S-Bend', 'corridor',
+  tile(21, 'corridor',
     [
       '111',
       '111',
@@ -269,7 +268,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 22: Wide L-corridor (2-wide corridors)
-  tile(22, 'Wide L-Corridor', 'corridor',
+  tile(22, 'corridor',
     [
       '111',
       '111',
@@ -284,7 +283,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 23: Z-shaped corridor (bends twice)
-  tile(23, 'Z-Corridor', 'corridor',
+  tile(23, 'corridor',
     [
       '0000111',
       '1111111',
@@ -298,7 +297,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 24: Room with corridor extending down
-  tile(24, 'Room with Passage', 'room',
+  tile(24, 'room',
     [
       '010',
       '111',
@@ -313,7 +312,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 25: L-shaped room with corridor
-  tile(25, 'L-Room with Corridor', 'room',
+  tile(25, 'room',
     [
       '000111',
       '111111',
@@ -327,7 +326,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 26: Small room with attached corridor going down
-  tile(26, 'Alcove Corridor', 'corridor',
+  tile(26, 'corridor',
     [
       '1',
       '1',
@@ -341,7 +340,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   // ── 31–36: Small Rooms ──
 
   // 31: Small rectangular room, 1 door on left
-  tile(31, 'Small Room', 'room',
+  tile(31, 'room',
     [
       '011',
       '011',
@@ -355,7 +354,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 32: Small room, 2 doors (left and right)
-  tile(32, 'Small Room 2-Door', 'room',
+  tile(32, 'room',
     [
       '00111',
       '00100',
@@ -370,7 +369,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 33: Taller narrow room
-  tile(33, 'Narrow Room', 'room',
+  tile(33, 'room',
     [
       '1',
       '1',
@@ -383,7 +382,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 34: Round room (octagonal approximation, 5x5)
-  tile(34, 'Round Room', 'room',
+  tile(34, 'room',
     [
       '010',
       '010',
@@ -399,7 +398,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 35: L-shaped room
-  tile(35, 'L-Shaped Room', 'room',
+  tile(35, 'room',
     [
       '10000',
       '11111',
@@ -412,7 +411,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 36: Oval room (elongated, 6x4)
-  tile(36, 'Oval Room', 'room',
+  tile(36, 'room',
     [
       '011',
       '010',
@@ -432,7 +431,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   // ── 41–46: Medium Rooms ──
 
   // 41: Large rectangular room
-  tile(41, 'Large Room', 'room',
+  tile(41, 'room',
     [
       '100',
       '111',
@@ -447,7 +446,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 42: Room with corridor extension to right
-  tile(42, 'Room with Extension', 'room',
+  tile(42, 'room',
     [
       '001',
       '111',
@@ -461,7 +460,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 43: T-shaped room (wider at bottom)
-  tile(43, 'T-Room', 'room',
+  tile(43, 'room',
     [
       '111',
       '111',
@@ -475,7 +474,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 44: Room with corridor going up
-  tile(44, 'Room with Corridor', 'room',
+  tile(44, 'room',
     [
       '0011',
       '1111',
@@ -490,7 +489,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 45: Cross-shaped room
-  tile(45, 'Cross Room', 'room',
+  tile(45, 'room',
     [
       '000100',
       '000100',
@@ -507,7 +506,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 46: U-shaped room (open at top)
-  tile(46, 'U-Room', 'room',
+  tile(46, 'room',
     [
       '111',
       '111',
@@ -524,7 +523,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   // ── 51–56: Complex Corridors ──
 
   // 51: Plus-shaped junction with longer vertical arms
-  tile(51, 'Branching Corridor', 'corridor',
+  tile(51, 'corridor',
     [
       '101',
       '111',
@@ -538,7 +537,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 52: Z-bend corridor (orthogonal bends)
-  tile(52, 'Z-Bend', 'corridor',
+  tile(52, 'corridor',
     [
       '01000',
       '11100',
@@ -555,7 +554,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 53: Double L-bend corridor (winding path)
-  tile(53, 'Winding Corridor', 'corridor',
+  tile(53, 'corridor',
     [
       '111',
       '010',
@@ -568,7 +567,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 54: Wide 2-cell passage
-  tile(54, 'Wide Passage', 'corridor',
+  tile(54, 'corridor',
     [
       '11100',
       '11111',
@@ -581,7 +580,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 55: Corridor with side nook
-  tile(55, 'Corridor with Nook', 'corridor',
+  tile(55, 'corridor',
     [
       '111111',
       '100000',
@@ -594,7 +593,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 56: Spiral/winding passage
-  tile(56, 'Spiral Passage', 'room',
+  tile(56, 'room',
     [
       '00111',
       '00111',
@@ -612,7 +611,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   // ── 61–66: Special Rooms ──
 
   // 61: T-shaped grand hall
-  tile(61, 'Grand Hall', 'room',
+  tile(61, 'room',
     [
       '111',  
       '111',
@@ -629,7 +628,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 62: Cross-shaped room with corridors
-  tile(62, 'Cross Hall', 'room',
+  tile(62, 'room',
     [
       '010',
       '111',
@@ -644,7 +643,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 63: Guard room (room that narrows to corridor at bottom)
-  tile(63, 'Guard Room', 'room',
+  tile(63, 'room',
     [
       '1',
       '1',
@@ -661,7 +660,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 64: H-shaped room (two rooms connected by corridor)
-  tile(64, 'H-Room', 'room',
+  tile(64, 'room',
     [
       '111',
       '111',
@@ -677,7 +676,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 65: Treasure room (diamond/rhombus room with single entrance)
-  tile(65, 'Treasure Room', 'room',
+  tile(65, 'room',
     [
       '100',
       '100',
@@ -693,7 +692,7 @@ const DUNGEON_TILES: TileTemplate[] = [
   ),
 
   // 66: Boss chamber (largest room, multiple entrances)
-  tile(66, 'Boss Chamber', 'room',
+  tile(66, 'room',
     [
       '00001',
       '00111',

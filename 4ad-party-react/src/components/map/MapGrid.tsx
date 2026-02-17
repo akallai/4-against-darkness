@@ -99,7 +99,7 @@ export function MapGrid() {
           t.cells.some((c) => c.col === col && c.row === row),
         )
         if (tile) {
-          if (confirm(`Remove tile "${getTileById(tile.templateId)?.name ?? tile.templateId}"?`)) {
+          if (confirm(`Remove tile #${tile.templateId}?`)) {
             removePlacedTile(tile.id)
           }
         }

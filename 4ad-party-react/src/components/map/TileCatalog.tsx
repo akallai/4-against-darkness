@@ -55,7 +55,7 @@ export function TileCatalog() {
           >
             <span className="tile-thumb-id">{t.id}</span>
             <TilePreview template={t} size={5} />
-            <span className="tile-thumb-name">{t.name}</span>
+            <span className="tile-thumb-name">#{t.id}</span>
           </div>
         ))}
       </div>

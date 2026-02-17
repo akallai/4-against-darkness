@@ -10,7 +10,6 @@ export interface TileDoor {
 
 export interface TileTemplate {
   id: number
-  name: string
   category: 'entrance' | 'corridor' | 'room'
   grid: string
   width: number
