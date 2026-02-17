@@ -1,0 +1,20 @@
+.map-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.map-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 768px) {
+  .map-main {
+    flex-direction: column;
+  }
+}

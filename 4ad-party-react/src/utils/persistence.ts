@@ -1,4 +1,4 @@
-import type { Character, JournalData, FollowersData, PartyStats, Quest } from '@/types'
+import type { Character, JournalData, FollowersData, PartyStats, Quest, MapData } from '@/types'
 import type { Encounter, BestiaryEntry } from '@/types'
 
 const BESTIARY_KEY = '4AD_Enemy_Bestiary'
@@ -12,6 +12,7 @@ export interface PartyBundle {
   encounters: Encounter[]
   partyStats: PartyStats
   quests: Quest[]
+  mapData: MapData
 }
 
 export function saveParty(key: string, bundle: PartyBundle): void {
@@ -21,6 +22,7 @@ export function saveParty(key: string, bundle: PartyBundle): void {
   localStorage.setItem(`${key}_Encounters`, JSON.stringify(bundle.encounters))
   localStorage.setItem(`${key}_PartyStats`, JSON.stringify(bundle.partyStats))
   localStorage.setItem(`${key}_Quests`, JSON.stringify(bundle.quests))
+  localStorage.setItem(`${key}_MapData`, JSON.stringify(bundle.mapData))
 }
 
 export function loadParty(key: string): PartyBundle | null {
@@ -45,8 +47,11 @@ export function loadParty(key: string): PartyBundle | null {
     const quests: Quest[] = JSON.parse(
       localStorage.getItem(`${key}_Quests`) ?? '[]',
     )
+    const mapData: MapData = JSON.parse(
+      localStorage.getItem(`${key}_MapData`) ?? '{"cells":[],"doors":[],"placedTiles":[],"labels":[]}',
+    )
 
-    return { characters, journalData, followersData, encounters, partyStats, quests }
+    return { characters, journalData, followersData, encounters, partyStats, quests, mapData }
   } catch {
     return null
   }
@@ -59,6 +64,7 @@ export function deleteParty(key: string): void {
   localStorage.removeItem(`${key}_Encounters`)
   localStorage.removeItem(`${key}_PartyStats`)
   localStorage.removeItem(`${key}_Quests`)
+  localStorage.removeItem(`${key}_MapData`)
 }
 
 export function listSavedParties(): string[] {
@@ -72,7 +78,8 @@ export function listSavedParties(): string[] {
       !key.includes('_Followers') &&
       !key.includes('_Encounters') &&
       !key.includes('_PartyStats') &&
-      !key.includes('_Quests')
+      !key.includes('_Quests') &&
+      !key.includes('_MapData')
     ) {
       parties.push(key)
     }

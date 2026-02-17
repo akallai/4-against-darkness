@@ -6,6 +6,7 @@ import { TrackerScreen } from '@/components/tracker/TrackerScreen'
 import { JournalScreen } from '@/components/journal/JournalScreen'
 import { EncountersScreen } from '@/components/encounters/EncountersScreen'
 import { FollowersScreen } from '@/components/followers/FollowersScreen'
+import { MapScreen } from '@/components/map/MapScreen'
 import { ModalManager } from '@/components/modals/ModalManager'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       {screen === 'journal' && <JournalScreen />}
       {screen === 'encounters' && <EncountersScreen />}
       {screen === 'followers' && <FollowersScreen />}
+      {screen === 'map' && <MapScreen />}
       <ModalManager />
     </AppShell>
   )

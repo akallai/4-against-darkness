@@ -1,0 +1,69 @@
+.map-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  min-height: 40px;
+}
+
+.map-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.map-toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.map-tool-btn {
+  padding: 4px 10px;
+  font-size: 0.78em;
+  border: 1px solid var(--border);
+  background: var(--btn-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.map-tool-btn:hover {
+  background: var(--btn-hover);
+}
+
+.map-tool-btn.active {
+  background: var(--global-accent);
+  color: #fff;
+  border-color: var(--global-accent);
+}
+
+.map-tool-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.map-tool-btn.mirror-on {
+  border-color: var(--global-accent);
+  color: var(--global-accent);
+}
+
+.map-back-btn {
+  padding: 4px 10px;
+  font-size: 0.78em;
+  border: 1px solid var(--border);
+  background: var(--btn-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: 3px;
+  margin-right: auto;
+}
+
+.map-back-btn:hover {
+  background: var(--btn-hover);
+}

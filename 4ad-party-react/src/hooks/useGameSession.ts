@@ -5,6 +5,7 @@ import { useEncounterStore } from '@/stores/useEncounterStore'
 import { useFollowerStore } from '@/stores/useFollowerStore'
 import { useQuestStore } from '@/stores/useQuestStore'
 import { useTavernStore } from '@/stores/useTavernStore'
+import { useMapStore } from '@/stores/useMapStore'
 import { useUIStore } from '@/stores/useUIStore'
 import {
   saveParty,
@@ -23,6 +24,7 @@ export function useGameSession() {
   const followerStore = useFollowerStore
   const questStore = useQuestStore
   const tavernStore = useTavernStore
+  const mapStore = useMapStore
   const uiStore = useUIStore
 
   const save = useCallback((notify = true) => {
@@ -36,6 +38,7 @@ export function useGameSession() {
       encounters: encounterStore.getState().encounters,
       partyStats: partyStore.getState().partyStats,
       quests: questStore.getState().quests,
+      mapData: mapStore.getState().mapData,
     }
 
     saveParty(key, bundle)
@@ -44,7 +47,7 @@ export function useGameSession() {
     if (notify) {
       alert('Game Saved & Tavern Updated!')
     }
-  }, [partyStore, journalStore, followerStore, encounterStore, questStore, tavernStore])
+  }, [partyStore, journalStore, followerStore, encounterStore, questStore, tavernStore, mapStore])
 
   const saveAndQuit = useCallback(() => {
     save(false)
@@ -63,6 +66,7 @@ export function useGameSession() {
     followerStore.getState().setFollowersData(bundle.followersData)
     encounterStore.getState().setEncounters(bundle.encounters)
     questStore.getState().setQuests(bundle.quests)
+    mapStore.getState().setMapData(bundle.mapData)
     setLastLoadedParty(key)
     uiStore.getState().setScreen('tracker')
 
@@ -91,6 +95,7 @@ export function useGameSession() {
     followerStore.getState().setFollowersData(createEmptyFollowersData())
     encounterStore.getState().resetEncounters()
     questStore.getState().resetQuests()
+    mapStore.getState().resetMap()
     partyStore.getState().setPartyStats({ mv: 0, bw: 0 })
 
     // Save creation mode
@@ -104,12 +109,13 @@ export function useGameSession() {
       encounters: encounterStore.getState().encounters,
       partyStats: partyStore.getState().partyStats,
       quests: questStore.getState().quests,
+      mapData: mapStore.getState().mapData,
     }
     saveParty(key, bundle)
     setLastLoadedParty(key)
 
     uiStore.getState().setScreen('tracker')
-  }, [partyStore, journalStore, followerStore, encounterStore, questStore, uiStore])
+  }, [partyStore, journalStore, followerStore, encounterStore, questStore, mapStore, uiStore])
 
   const deleteGame = useCallback((key: string) => {
     deleteParty(key)

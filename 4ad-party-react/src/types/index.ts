@@ -11,12 +11,16 @@ export { createEmptyAnimal, createEmptyMount, createEmptyFollowersData } from '.
 
 export type { Quest, QuestTask } from './quest'
 
+export type { DoorSide, TileDoor, TileTemplate, Rotation, GridCoord, AbsoluteDoor, PlacedTile, MapLabel, MapTool, MapData } from './map'
+export { MAP_COLS, MAP_ROWS, createEmptyMapData } from './map'
+
 export type Screen =
   | 'setup'
   | 'tracker'
   | 'journal'
   | 'encounters'
   | 'followers'
+  | 'map'
 
 export type CreationMode = 'standard' | 'troupe'
 

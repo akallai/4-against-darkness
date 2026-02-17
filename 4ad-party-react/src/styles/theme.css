@@ -12,6 +12,12 @@
   --btn-bg: transparent;
   --btn-hover: rgba(212, 175, 55, 0.15);
   --font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --map-empty-bg: #1a1a1a;
+  --map-floor-bg: #3a3a3a;
+  --map-wall-color: #e0e0e0;
+  --map-door-color: #ffdc73;
+  --map-ghost-bg: rgba(212, 175, 55, 0.25);
+  --map-grid-line: rgba(255, 255, 255, 0.05);
   color-scheme: dark;
 }
 
@@ -75,6 +81,12 @@ body.classic-mode {
   --classic-text: #1a1a1a;
   --classic-gold: #d4af37;
   --global-accent: var(--classic-accent) !important;
+  --map-empty-bg: var(--classic-paper-dark) !important;
+  --map-floor-bg: var(--classic-paper) !important;
+  --map-wall-color: var(--classic-ink) !important;
+  --map-door-color: #c0392b !important;
+  --map-ghost-bg: rgba(122, 9, 9, 0.2) !important;
+  --map-grid-line: rgba(0, 0, 0, 0.08) !important;
   background-color: var(--classic-bg) !important;
   background-image:
     radial-gradient(circle at 50% 50%, transparent 0%, rgba(0, 0, 0, 0.4) 100%),

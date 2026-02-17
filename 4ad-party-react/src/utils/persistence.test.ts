@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { partyKeyFromName, partyNameFromKey, saveParty, loadParty, deleteParty, listSavedParties } from './persistence'
-import { createEmptyCharacter, createEmptyJournalData, createEmptyFollowersData } from '@/types'
+import { createEmptyCharacter, createEmptyJournalData, createEmptyFollowersData, createEmptyMapData } from '@/types'
 
 describe('persistence', () => {
   beforeEach(() => {
@@ -29,6 +29,7 @@ describe('persistence', () => {
       encounters: [],
       partyStats: { mv: 5, bw: 2 },
       quests: [],
+      mapData: createEmptyMapData(),
     }
     saveParty('4AD_Party_Test', bundle)
     const loaded = loadParty('4AD_Party_Test')
@@ -45,6 +46,7 @@ describe('persistence', () => {
       encounters: [],
       partyStats: { mv: 0, bw: 0 },
       quests: [],
+      mapData: createEmptyMapData(),
     }
     saveParty('4AD_Party_Del', bundle)
     expect(loadParty('4AD_Party_Del')).not.toBeNull()
@@ -60,6 +62,7 @@ describe('persistence', () => {
       encounters: [],
       partyStats: { mv: 0, bw: 0 },
       quests: [],
+      mapData: createEmptyMapData(),
     }
     saveParty('4AD_Party_Alpha', bundle)
     saveParty('4AD_Party_Beta', bundle)

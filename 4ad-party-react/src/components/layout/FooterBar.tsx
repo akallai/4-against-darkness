@@ -29,6 +29,9 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
         <button className="btn-journal-gold" onClick={() => setScreen('encounters')}>
           Combat
         </button>
+        <button className="btn-journal-gold" onClick={() => setScreen('map')}>
+          Map
+        </button>
       </div>
       <div className="footer-group center">
         {partyName && <span className="active-party-label">{partyName}</span>}
