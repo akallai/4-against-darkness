@@ -22,17 +22,13 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
 
   const handleComplete = (outcome: string) => {
     completeEncounter(encounter.id, outcome)
-    if (outcome === 'victory') {
-      const stat = encounter.category === 'minion' ? 'mv' : 'bw'
-      incrementStat(stat)
-    }
+    const stat = encounter.category === 'minion' ? 'mv' : 'bw'
+    incrementStat(stat)
   }
 
   const handleReopen = () => {
-    if (encounter.outcome === 'victory') {
-      const stat = encounter.category === 'minion' ? 'mv' : 'bw'
-      incrementStat(stat, -1)
-    }
+    const stat = encounter.category === 'minion' ? 'mv' : 'bw'
+    incrementStat(stat, -1)
     updateEncounter(encounter.id, { isCompleted: false, outcome: '' })
   }
 
