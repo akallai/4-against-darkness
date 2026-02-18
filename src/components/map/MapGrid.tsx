@@ -2,7 +2,7 @@ import { useMemo, useCallback, useRef } from 'react'
 import { useMapStore } from '@/stores/useMapStore'
 import { MAP_COLS, MAP_ROWS } from '@/types/map'
 import type { DoorSide, WallOpeningType } from '@/types/map'
-import { stampTile, transformTile } from '@/utils/mapGeometry'
+import { stampTile, transformTile, computeBlackoutCells } from '@/utils/mapGeometry'
 import { getTileById } from '@/data/tileTemplates'
 import './MapGrid.css'
 
@@ -36,6 +36,12 @@ export function MapGrid() {
     }
     return set
   }, [mapData.cells])
+
+  // Compute blackout cells (enclosed empty regions with no door access)
+  const blackoutCells = useMemo(
+    () => computeBlackoutCells(mapData.cells, mapData.doors, MAP_COLS, MAP_ROWS),
+    [mapData.cells, mapData.doors],
+  )
 
   // Build door lookup map: cell key → Map<side, { type, source }>
   // source=true for the canonical entry (renders marker), source=false for the mirror (CSS class only)
@@ -210,7 +216,7 @@ export function MapGrid() {
         result.push(
           <div
             key={key}
-            className={`map-cell${isFloor ? ' floor' : ''}${isGhost ? ' ghost' : ''}${wallClasses}${doorClasses}`}
+            className={`map-cell${isFloor ? ' floor' : ''}${isGhost ? ' ghost' : ''}${!isFloor && !isGhost && blackoutCells.has(key) ? ' blackout' : ''}${wallClasses}${doorClasses}`}
             onMouseDown={(e) => handleCellMouseDown(c, r, e)}
             onMouseEnter={() => handleCellMouseEnter(c, r)}
           >
@@ -235,7 +241,7 @@ export function MapGrid() {
       }
     }
     return result
-  }, [cellSet, ghostCells, ghostDoorMap, doorMap, labelMap, activeTool, handleCellMouseDown, handleCellMouseEnter])
+  }, [cellSet, blackoutCells, ghostCells, ghostDoorMap, doorMap, labelMap, activeTool, handleCellMouseDown, handleCellMouseEnter])
 
   return (
     <div className="map-grid-wrapper">
