@@ -90,7 +90,10 @@ export const useMapStore = create<MapState>()((set, get) => ({
   undoStack: [],
   isDrawing: false,
 
-  setMapData: (data) => set({ mapData: data, undoStack: [] }),
+  setMapData: (data) => set({
+    mapData: { ...data, doors: data.doors.map(canonicalizeDoor) },
+    undoStack: [],
+  }),
   resetMap: () => set({ mapData: createEmptyMapData(), undoStack: [] }),
 
   setActiveTool: (tool) => set({ activeTool: tool }),

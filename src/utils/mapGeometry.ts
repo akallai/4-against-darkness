@@ -131,7 +131,7 @@ export function stampTile(
     const col = originCol + d.col
     const row = originRow + d.row
     if (col >= 0 && col < MAP_COLS && row >= 0 && row < MAP_ROWS) {
-      absDoors.push({ col, row, side: d.side, ...(d.type ? { type: d.type } : {}) })
+      absDoors.push(canonicalizeDoor({ col, row, side: d.side, ...(d.type ? { type: d.type } : {}) }))
     }
   }
 
