@@ -36,6 +36,10 @@
   background-color: var(--map-ghost-bg);
 }
 
+.map-cell.blackout {
+  background-color: var(--map-blackout-bg);
+}
+
 /* Walls — thick borders on floor cells adjacent to empty/edge */
 .map-cell.wall-top {
   border-top: 3px solid var(--map-wall-color);
