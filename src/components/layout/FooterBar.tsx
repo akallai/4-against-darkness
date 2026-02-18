@@ -4,7 +4,10 @@ import { usePartyStore } from '@/stores/usePartyStore'
 import { useFullscreen } from './AppShell'
 import { useLongPress } from '@/hooks/useLongPress'
 import { DiceToast } from '@/components/common/DiceToast'
+import { GameIcon } from '@/components/common/GameIcon'
 import { rollDice, rollD66 } from '@/utils/dice'
+import type { Screen } from '@/types'
+import type { IconName } from '@/components/common/GameIcon'
 import './FooterBar.css'
 
 interface FooterBarProps {
@@ -19,7 +22,16 @@ interface ToastData {
   key: number
 }
 
+const NAV_ITEMS: { screen: Screen; icon: IconName; label: string }[] = [
+  { screen: 'tracker', icon: 'campfire', label: 'Party' },
+  { screen: 'journal', icon: 'open-book', label: 'Journal' },
+  { screen: 'encounters', icon: 'crossed-swords', label: 'Combat' },
+  { screen: 'followers', icon: 'rally-the-troops', label: 'Followers' },
+  { screen: 'map', icon: 'treasure-map', label: 'Map' },
+]
+
 export function FooterBar({ onSave, onQuit }: FooterBarProps) {
+  const screen = useUIStore((s) => s.screen)
   const setScreen = useUIStore((s) => s.setScreen)
   const openModal = useUIStore((s) => s.openModal)
   const partyName = usePartyStore((s) => s.partyName)
@@ -62,69 +74,90 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
   )
 
   return (
-    <div className="footer-bar">
-      <div className="footer-group">
-        <button className="btn-fs" onClick={toggleFullscreen} title="Toggle Fullscreen">
-          &#x26F6;
-        </button>
-        <button className="btn-journal-gold" onClick={() => setScreen('journal')}>
-          Journal
-        </button>
-        <button className="btn-journal-gold" onClick={() => setScreen('followers')}>
-          Followers
-        </button>
-        <button className="btn-journal-gold" onClick={() => setScreen('encounters')}>
-          Combat
-        </button>
-        <button className="btn-journal-gold" onClick={() => setScreen('map')}>
-          Map
-        </button>
+    <footer className="footer-bar">
+      <nav className="footer-nav">
+        {NAV_ITEMS.map((item) => (
+          <button
+            key={item.screen}
+            className={`footer-icon-btn${screen === item.screen ? ' active' : ''}`}
+            onClick={() => setScreen(item.screen)}
+            title={item.label}
+          >
+            <GameIcon name={item.icon} />
+            <span className="footer-icon-label">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+
+      <div className="footer-center">
+        {partyName && <span className="footer-party-name">{partyName}</span>}
       </div>
-      <div className="footer-group center">
-        {partyName && <span className="active-party-label">{partyName}</span>}
-      </div>
-      <div className="footer-group">
-        <button className="btn-journal-gold" onClick={() => openModal('quest-tracker')}>
-          Quests
-        </button>
-        <button className="btn-oracle" onClick={() => openModal('gm-tools')}>
-          GM Tools
+
+      <div className="footer-actions">
+        <button
+          className="footer-icon-btn"
+          onClick={() => openModal('quest-tracker')}
+          title="Quests"
+        >
+          <GameIcon name="tied-scroll" />
         </button>
         <button
-          className="btn-dice-inline"
-          {...d6Press}
-          onContextMenu={(e) => handleContextMenu(e, 1, 6, 'd6')}
-          title="Tap: d6 · Hold: d6!"
+          className="footer-icon-btn"
+          onClick={() => openModal('gm-tools')}
+          title="GM Tools"
         >
-          d6
+          <GameIcon name="crystal-ball" />
+        </button>
+
+        <span className="footer-divider" />
+
+        <div className="footer-dice-group">
+          <button
+            className="btn-dice-inline"
+            {...d6Press}
+            onContextMenu={(e) => handleContextMenu(e, 1, 6, 'd6')}
+            title="Tap: d6 · Hold: d6!"
+          >
+            d6
+          </button>
+          <button
+            className="btn-dice-inline"
+            onClick={() => rollStandard(2, 6, '2d6', false)}
+            title="Roll 2d6"
+          >
+            2d6
+          </button>
+          <button
+            className="btn-dice-inline"
+            {...d8Press}
+            onContextMenu={(e) => handleContextMenu(e, 1, 8, 'd8')}
+            title="Tap: d8 · Hold: d8!"
+          >
+            d8
+          </button>
+          <button
+            className="btn-dice-inline"
+            onClick={handleD66}
+            title="Roll d66"
+          >
+            d66
+          </button>
+        </div>
+
+        <span className="footer-divider" />
+
+        <button className="footer-icon-btn" onClick={onSave} title="Save">
+          <GameIcon name="save" />
+        </button>
+        <button className="footer-icon-btn" onClick={onQuit} title="Save & Quit">
+          <GameIcon name="exit-door" />
         </button>
         <button
-          className="btn-dice-inline"
-          onClick={() => rollStandard(2, 6, '2d6', false)}
-          title="Roll 2d6"
+          className="footer-icon-btn footer-icon-btn--subtle"
+          onClick={toggleFullscreen}
+          title="Fullscreen"
         >
-          2d6
-        </button>
-        <button
-          className="btn-dice-inline"
-          {...d8Press}
-          onContextMenu={(e) => handleContextMenu(e, 1, 8, 'd8')}
-          title="Tap: d8 · Hold: d8!"
-        >
-          d8
-        </button>
-        <button
-          className="btn-dice-inline"
-          onClick={handleD66}
-          title="Roll d66"
-        >
-          d66
-        </button>
-        <button className="btn-main" onClick={onSave}>
-          Save
-        </button>
-        <button className="btn-main" onClick={onQuit}>
-          Quit
+          <GameIcon name="resize" size={16} />
         </button>
       </div>
 
@@ -137,6 +170,6 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
           onDismiss={() => setToast(null)}
         />
       )}
-    </div>
+    </footer>
   )
 }

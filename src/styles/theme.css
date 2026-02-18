@@ -177,7 +177,6 @@ body.classic-mode .btn-journal-gold,
 body.classic-mode .btn-gold-dashed,
 body.classic-mode .setup-footer-btn,
 body.classic-mode .btn-oracle,
-body.classic-mode .btn-dice-inline,
 body.classic-mode .btn-fs {
   background-color: var(--classic-accent) !important;
   color: #fff !important;
@@ -187,8 +186,33 @@ body.classic-mode .btn-fs {
   font-size: 0.8em;
 }
 
+/* Classic Footer */
+body.classic-mode .footer-bar {
+  background: rgba(30, 27, 24, 0.95) !important;
+  border-top-color: var(--classic-accent) !important;
+}
+
+body.classic-mode .footer-icon-btn {
+  color: var(--classic-gold) !important;
+}
+
+body.classic-mode .footer-icon-btn.active::after {
+  background: var(--classic-accent) !important;
+}
+
+body.classic-mode .footer-party-name {
+  color: var(--classic-gold) !important;
+}
+
+body.classic-mode .footer-divider {
+  background: rgba(160, 120, 60, 0.3) !important;
+}
+
 body.classic-mode .btn-dice-inline {
-  border: 2px dotted #000 !important;
+  background-color: var(--classic-accent) !important;
+  color: #fff !important;
+  border: 1px solid #000 !important;
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4) !important;
   font-family: 'Courier New', Courier, monospace;
 }
 
