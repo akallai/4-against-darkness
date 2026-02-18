@@ -50,7 +50,6 @@
 
 .btn-main,
 .btn-oracle,
-.btn-dice,
 .btn-journal-gold,
 .btn-fs {
   background: var(--btn-bg);
@@ -103,6 +102,33 @@
   transition: all 0.2s;
 }
 
+.btn-dice-inline {
+  background: var(--btn-bg);
+  border: 2px dotted var(--global-accent);
+  color: var(--global-accent);
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 6px 10px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+  font-size: 0.85em;
+  transition: all 0.2s;
+  min-width: 36px;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn-dice-inline:hover {
+  background: var(--btn-hover);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+}
+
+.btn-dice-inline:active {
+  box-shadow: 0 0 12px var(--global-accent), inset 0 0 4px rgba(212, 175, 55, 0.2);
+  border-style: solid;
+}
+
 @media (max-width: 600px) {
   .footer-group {
     gap: 3px;
@@ -116,5 +142,11 @@
   .footer-bar button {
     padding: 6px 8px;
     font-size: 0.8em;
+  }
+
+  .btn-dice-inline {
+    padding: 6px 6px;
+    font-size: 0.75em;
+    min-width: 36px;
   }
 }
