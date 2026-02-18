@@ -1,0 +1,200 @@
+/* ============================================================
+   Encounter Type Selection Modal
+   ============================================================ */
+
+.enc-type-prompt {
+  font-size: 0.85em;
+  color: #999;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.enc-type-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.enc-type-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  text-align: left;
+  width: 100%;
+}
+
+.enc-type-option:hover {
+  border-color: var(--global-accent);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.enc-type-icon {
+  font-size: 1.6em;
+  width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.enc-type-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.enc-type-name {
+  font-weight: bold;
+  font-size: 0.95em;
+  color: var(--global-accent);
+  margin-bottom: 2px;
+}
+
+.enc-type-desc {
+  font-size: 0.75em;
+  color: #888;
+  line-height: 1.3;
+}
+
+/* ============================================================
+   Encounter Creation Modal
+   ============================================================ */
+
+.enc-create-bestiary {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.enc-create-bestiary label {
+  display: block;
+  font-size: 0.7em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.enc-create-bestiary select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 0.85em;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+}
+
+.enc-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.enc-create-name-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 1em;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  transition: border-color 0.2s;
+}
+
+.enc-create-name-input::placeholder {
+  color: #666;
+  font-weight: normal;
+}
+
+.enc-create-name-input:focus {
+  outline: none;
+  border-color: var(--global-accent);
+}
+
+.enc-create-stat-row {
+  display: flex;
+  gap: 8px;
+}
+
+.enc-create-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.enc-create-field label {
+  font-size: 0.65em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+  padding-left: 2px;
+}
+
+.enc-create-field input {
+  width: 100%;
+  padding: 7px 8px;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  transition: border-color 0.2s;
+}
+
+.enc-create-field input:focus {
+  outline: none;
+  border-color: var(--global-accent);
+}
+
+.enc-create-field input::placeholder {
+  color: #555;
+}
+
+.enc-create-abilities-input {
+  width: 100%;
+  padding: 7px 8px;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  transition: border-color 0.2s;
+}
+
+.enc-create-abilities-input::placeholder {
+  color: #555;
+}
+
+.enc-create-abilities-input:focus {
+  outline: none;
+  border-color: var(--global-accent);
+}
+
+.enc-create-section-label {
+  font-size: 0.65em;
+  color: #777;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.enc-create-submit {
+  width: 100%;
+  margin-top: 6px;
+  padding: 11px;
+  font-size: 0.95em;
+}

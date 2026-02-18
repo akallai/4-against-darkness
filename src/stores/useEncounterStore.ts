@@ -17,6 +17,7 @@ interface EncounterState {
   toggleEnemyStatus: (encounterId: number, enemyIndex: number) => void
   completeEncounter: (id: number, outcome: string) => void
   setMoraleChecked: (id: number) => void
+  setEncounterCount: (id: number, count: number) => void
 
   addBestiaryEntry: (entry: BestiaryEntry) => void
   updateBestiaryEntry: (index: number, entry: BestiaryEntry) => void
@@ -100,6 +101,16 @@ export const useEncounterStore = create<EncounterState>()((set) => ({
       encounters: state.encounters.map((e) =>
         e.id === id ? { ...e, moraleChecked: true } : e,
       ),
+    })),
+
+  setEncounterCount: (id, count) =>
+    set((state) => ({
+      encounters: state.encounters.map((e) => {
+        if (e.id !== id || count < 1) return e
+        const newStatus = e.status.slice(0, count)
+        while (newStatus.length < count) newStatus.push(false)
+        return { ...e, count, status: newStatus }
+      }),
     })),
 
   addBestiaryEntry: (entry) =>

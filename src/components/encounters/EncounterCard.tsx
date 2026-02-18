@@ -13,6 +13,7 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
   const deleteEncounter = useEncounterStore((s) => s.deleteEncounter)
   const toggleEncounterCollapse = useEncounterStore((s) => s.toggleEncounterCollapse)
   const toggleEnemyStatus = useEncounterStore((s) => s.toggleEnemyStatus)
+  const setEncounterCount = useEncounterStore((s) => s.setEncounterCount)
   const completeEncounter = useEncounterStore((s) => s.completeEncounter)
   const incrementStat = usePartyStore((s) => s.incrementStat)
 
@@ -27,6 +28,14 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
     }
   }
 
+  const handleReopen = () => {
+    if (encounter.outcome === 'victory') {
+      const stat = encounter.category === 'minion' ? 'mv' : 'bw'
+      incrementStat(stat, -total)
+    }
+    updateEncounter(encounter.id, { isCompleted: false, outcome: '' })
+  }
+
   const categoryLabel =
     encounter.category === 'minion' ? 'Minion' : encounter.category === 'boss' ? 'Boss' : 'Weird'
 
@@ -36,10 +45,29 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
         <button className="arrow-btn">
           {encounter.collapsed ? '▶' : '▼'}
         </button>
-        <span className="enc-type">{encounter.type || 'Unknown'}</span>
-        <span className={`enc-status-badge ${encounter.isCompleted ? 'done' : 'active'}`}>
-          {encounter.isCompleted ? encounter.outcome : `${defeated}/${total}`}
-        </span>
+        <input
+          className="enc-type-input"
+          value={encounter.type}
+          onChange={(e) => updateEncounter(encounter.id, { type: e.target.value })}
+          onClick={(e) => e.stopPropagation()}
+          placeholder="Unknown"
+        />
+        {encounter.isCompleted ? (
+          <button
+            className="enc-status-badge done"
+            onClick={(e) => {
+              e.stopPropagation()
+              handleReopen()
+            }}
+            title="Click to reopen encounter"
+          >
+            {encounter.outcome} ↺
+          </button>
+        ) : (
+          <span className="enc-status-badge active">
+            {defeated}/{total}
+          </span>
+        )}
         <span className="enc-category">{categoryLabel}</span>
         <button
           className="btn-list-action"
@@ -97,18 +125,38 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
             </div>
           </div>
 
-          <div className="enemy-pip-grid">
-            {encounter.status.map((isDefeated, i) => (
-              <label key={i} className="enemy-pip-label">
-                <input
-                  type="checkbox"
-                  className="enemy-check-input"
-                  checked={isDefeated}
-                  onChange={() => toggleEnemyStatus(encounter.id, i)}
-                />
-                <span className={`enemy-pip ${isDefeated ? 'defeated' : ''}`} />
-              </label>
-            ))}
+          <div className="enc-pip-section">
+            <div className="enemy-pip-grid">
+              {encounter.status.map((isDefeated, i) => (
+                <label key={i} className="enemy-pip-label">
+                  <input
+                    type="checkbox"
+                    className="enemy-check-input"
+                    checked={isDefeated}
+                    onChange={() => toggleEnemyStatus(encounter.id, i)}
+                  />
+                  <span className={`enemy-pip ${isDefeated ? 'defeated' : ''}`} />
+                </label>
+              ))}
+            </div>
+            {!encounter.isCompleted && (
+              <div className="enc-count-control">
+                <button
+                  className="enc-count-btn"
+                  onClick={() => setEncounterCount(encounter.id, encounter.count - 1)}
+                  disabled={encounter.count <= 1}
+                >
+                  −
+                </button>
+                <span className="enc-count-value">{encounter.count}</span>
+                <button
+                  className="enc-count-btn"
+                  onClick={() => setEncounterCount(encounter.id, encounter.count + 1)}
+                >
+                  +
+                </button>
+              </div>
+            )}
           </div>
 
           <AutoTextarea

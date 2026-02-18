@@ -3,6 +3,7 @@ import { Modal } from '@/components/common/Modal'
 import { useEncounterStore } from '@/stores/useEncounterStore'
 import { useUIStore } from '@/stores/useUIStore'
 import type { EncounterCategory } from '@/types'
+import './EncounterModals.css'
 
 interface EncounterCreationModalProps {
   isOpen: boolean
@@ -66,10 +67,10 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create Encounter">
       {bestiary.length > 0 && (
-        <div style={{ marginBottom: '10px' }}>
-          <label style={{ fontSize: '0.8em', color: 'var(--global-accent)' }}>From Bestiary:</label>
+        <div className="enc-create-bestiary">
+          <label>From Bestiary</label>
           <select value={selectedBestiary} onChange={(e) => loadFromBestiary(e.target.value)}>
-            <option value="">-- Select --</option>
+            <option value="">-- Select creature --</option>
             {bestiary.map((b, i) => (
               <option key={i} value={i}>{b.type} ({b.category})</option>
             ))}
@@ -77,40 +78,62 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <input placeholder="Enemy name" value={type} onChange={(e) => setType(e.target.value)} />
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <label style={{ flex: 1, fontSize: '0.8em' }}>
-            Count
-            <input type="number" value={count} onChange={(e) => setCount(parseInt(e.target.value) || 1)} min={1} />
-          </label>
-          <label style={{ flex: 1, fontSize: '0.8em' }}>
-            Life
-            <input value={life} onChange={(e) => setLife(e.target.value)} />
-          </label>
-          <label style={{ flex: 1, fontSize: '0.8em' }}>
-            Level
-            <input value={lvl} onChange={(e) => setLvl(e.target.value)} />
-          </label>
+      <div className="enc-create-form">
+        <input
+          className="enc-create-name-input"
+          placeholder="Enemy name"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        />
+
+        <div className="enc-create-section-label">Combat Stats</div>
+
+        <div className="enc-create-stat-row">
+          <div className="enc-create-field">
+            <label>Count</label>
+            <input
+              type="number"
+              value={count}
+              onChange={(e) => setCount(parseInt(e.target.value) || 1)}
+              min={1}
+            />
+          </div>
+          <div className="enc-create-field">
+            <label>Life</label>
+            <input value={life} onChange={(e) => setLife(e.target.value)} placeholder="HP" />
+          </div>
+          <div className="enc-create-field">
+            <label>Level</label>
+            <input value={lvl} onChange={(e) => setLvl(e.target.value)} placeholder="Lvl" />
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <label style={{ flex: 1, fontSize: '0.8em' }}>
-            Morale
+
+        <div className="enc-create-stat-row">
+          <div className="enc-create-field">
+            <label>Morale</label>
             <input value={morale} onChange={(e) => setMorale(e.target.value)} />
-          </label>
-          <label style={{ flex: 1, fontSize: '0.8em' }}>
-            Attacks
+          </div>
+          <div className="enc-create-field">
+            <label>Attacks</label>
             <input value={attacks} onChange={(e) => setAttacks(e.target.value)} />
-          </label>
-          <label style={{ flex: 1, fontSize: '0.8em' }}>
-            Treasure
+          </div>
+          <div className="enc-create-field">
+            <label>Treasure</label>
             <input value={treasure} onChange={(e) => setTreasure(e.target.value)} />
-          </label>
+          </div>
         </div>
-        <input placeholder="Abilities" value={abilities} onChange={(e) => setAbilities(e.target.value)} />
+
+        <div className="enc-create-section-label">Special</div>
+
+        <input
+          className="enc-create-abilities-input"
+          placeholder="Abilities (e.g. regeneration, flying...)"
+          value={abilities}
+          onChange={(e) => setAbilities(e.target.value)}
+        />
       </div>
 
-      <button className="btn-main" style={{ width: '100%', marginTop: '15px' }} onClick={handleCreate}>
+      <button className="btn-main enc-create-submit" onClick={handleCreate}>
         Create Encounter
       </button>
     </Modal>
