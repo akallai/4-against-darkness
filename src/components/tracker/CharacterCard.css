@@ -146,31 +146,10 @@
 }
 
 .secondary-stats {
-  display: flex;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
   padding: 6px 0;
-  flex-wrap: wrap;
-}
-
-.secondary-stats label {
-  display: flex;
-  flex-direction: column;
-  font-size: 0.65em;
-  color: var(--global-accent);
-  text-transform: uppercase;
-  flex: 1;
-  min-width: 45px;
-}
-
-.secondary-stats input {
-  width: 100%;
-  padding: 2px;
-  font-size: 1.3em;
-  text-align: center;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--row-line);
-  color: var(--text-color);
 }
 
 .card-notes {

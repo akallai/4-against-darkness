@@ -165,38 +165,34 @@ export function CharacterCard({
         />
 
         <div className="secondary-stats">
-          <label>
-            Clues
-            <input
-              type="number"
-              value={character.clues}
-              onChange={(e) => update({ clues: parseInt(e.target.value) || 0 })}
-            />
-          </label>
-          <label>
-            Madness
-            <input
-              type="number"
-              value={character.madness}
-              onChange={(e) => update({ madness: parseInt(e.target.value) || 0 })}
-            />
-          </label>
-          <label>
-            Rations
-            <input
-              type="number"
-              value={character.rations}
-              onChange={(e) => update({ rations: parseInt(e.target.value) || 0 })}
-            />
-          </label>
-          <label>
-            XP
-            <input
-              type="number"
-              value={character.xp}
-              onChange={(e) => update({ xp: parseInt(e.target.value) || 0 })}
-            />
-          </label>
+          <StatBox
+            label="Clues"
+            value={character.clues}
+            onChange={(val) => update({ clues: parseInt(val) || 0 })}
+            onDecrement={() => update({ clues: Math.max(0, character.clues - 1) })}
+            onIncrement={() => update({ clues: character.clues + 1 })}
+          />
+          <StatBox
+            label="Madness"
+            value={character.madness}
+            onChange={(val) => update({ madness: parseInt(val) || 0 })}
+            onDecrement={() => update({ madness: Math.max(0, character.madness - 1) })}
+            onIncrement={() => update({ madness: character.madness + 1 })}
+          />
+          <StatBox
+            label="Rations"
+            value={character.rations}
+            onChange={(val) => update({ rations: parseInt(val) || 0 })}
+            onDecrement={() => update({ rations: Math.max(0, character.rations - 1) })}
+            onIncrement={() => update({ rations: character.rations + 1 })}
+          />
+          <StatBox
+            label="XP"
+            value={character.xp}
+            onChange={(val) => update({ xp: parseInt(val) || 0 })}
+            onDecrement={() => update({ xp: Math.max(0, character.xp - 1) })}
+            onIncrement={() => update({ xp: character.xp + 1 })}
+          />
         </div>
 
         <EditableList
