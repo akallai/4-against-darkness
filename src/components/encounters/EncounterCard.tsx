@@ -64,7 +64,7 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
             {encounter.outcome} ↺
           </button>
         ) : (
-          <span className="enc-status-badge active">
+          <span className={`enc-status-badge active ${defeated === total ? 'all-dead' : ''}`}>
             {defeated}/{total}
           </span>
         )}

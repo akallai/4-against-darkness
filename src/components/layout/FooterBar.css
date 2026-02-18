@@ -123,6 +123,13 @@
 /* ---------- Dice buttons ---------- */
 .footer-dice-group {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.footer-dice-buttons {
+  display: flex;
   gap: 2px;
 }
 

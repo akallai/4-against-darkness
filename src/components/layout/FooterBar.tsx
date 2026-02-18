@@ -20,6 +20,9 @@ interface ToastData {
   detail?: string
   label: string
   key: number
+  exploded?: boolean
+  rollChain?: number[]
+  sides?: number
 }
 
 const NAV_ITEMS: { screen: Screen; icon: IconName; label: string }[] = [
@@ -46,7 +49,19 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
     (count: number, sides: number, label: string, exploding: boolean) => {
       const result = rollDice(count, sides, exploding)
       const displayLabel = exploding ? `${label}!` : label
-      showRoll(result.total, displayLabel, result.detail)
+      const didExplode = exploding && result.individualRolls.some((dr) => dr.length > 1)
+      if (didExplode) {
+        setToast({
+          total: result.total,
+          label: displayLabel,
+          key: Date.now(),
+          exploded: true,
+          rollChain: result.individualRolls.flat(),
+          sides,
+        })
+      } else {
+        showRoll(result.total, displayLabel, result.detail)
+      }
     },
     [showRoll],
   )
@@ -100,6 +115,7 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
           title="Quests"
         >
           <GameIcon name="tied-scroll" />
+          <span className="footer-icon-label">Quests</span>
         </button>
         <button
           className="footer-icon-btn"
@@ -107,50 +123,56 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
           title="GM Tools"
         >
           <GameIcon name="crystal-ball" />
+          <span className="footer-icon-label">Tools</span>
         </button>
 
         <span className="footer-divider" />
 
         <div className="footer-dice-group">
-          <button
-            className="btn-dice-inline"
-            {...d6Press}
-            onContextMenu={(e) => handleContextMenu(e, 1, 6, 'd6')}
-            title="Tap: d6 · Hold: d6!"
-          >
-            d6
-          </button>
-          <button
-            className="btn-dice-inline"
-            onClick={() => rollStandard(2, 6, '2d6', false)}
-            title="Roll 2d6"
-          >
-            2d6
-          </button>
-          <button
-            className="btn-dice-inline"
-            {...d8Press}
-            onContextMenu={(e) => handleContextMenu(e, 1, 8, 'd8')}
-            title="Tap: d8 · Hold: d8!"
-          >
-            d8
-          </button>
-          <button
-            className="btn-dice-inline"
-            onClick={handleD66}
-            title="Roll d66"
-          >
-            d66
-          </button>
+          <div className="footer-dice-buttons">
+            <button
+              className="btn-dice-inline"
+              {...d6Press}
+              onContextMenu={(e) => handleContextMenu(e, 1, 6, 'd6')}
+              title="Tap: d6 · Hold: d6!"
+            >
+              d6
+            </button>
+            <button
+              className="btn-dice-inline"
+              onClick={() => rollStandard(2, 6, '2d6', false)}
+              title="Roll 2d6"
+            >
+              2d6
+            </button>
+            <button
+              className="btn-dice-inline"
+              {...d8Press}
+              onContextMenu={(e) => handleContextMenu(e, 1, 8, 'd8')}
+              title="Tap: d8 · Hold: d8!"
+            >
+              d8
+            </button>
+            <button
+              className="btn-dice-inline"
+              onClick={handleD66}
+              title="Roll d66"
+            >
+              d66
+            </button>
+          </div>
+          <span className="footer-icon-label">Dice</span>
         </div>
 
         <span className="footer-divider" />
 
         <button className="footer-icon-btn" onClick={onSave} title="Save">
           <GameIcon name="save" />
+          <span className="footer-icon-label">Save</span>
         </button>
         <button className="footer-icon-btn" onClick={onQuit} title="Save & Quit">
           <GameIcon name="exit-door" />
+          <span className="footer-icon-label">Quit</span>
         </button>
         <button
           className="footer-icon-btn footer-icon-btn--subtle"
@@ -167,6 +189,9 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
           total={toast.total}
           detail={toast.detail}
           label={toast.label}
+          exploded={toast.exploded}
+          rollChain={toast.rollChain}
+          sides={toast.sides}
           onDismiss={() => setToast(null)}
         />
       )}

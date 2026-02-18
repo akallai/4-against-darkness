@@ -7,41 +7,303 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-  padding: 10px 24px;
-  background: rgba(0, 0, 0, 0.85);
+  gap: 4px;
+  padding: 14px 30px;
+  background: linear-gradient(160deg, rgba(15, 14, 20, 0.93), rgba(22, 20, 12, 0.93));
   border: 1px solid var(--global-accent);
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  animation: dice-toast-in 0.25s ease-out;
+  animation: dice-toast-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: auto;
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.12),
+    0 4px 24px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 @keyframes dice-toast-in {
-  from {
+  0% {
     opacity: 0;
-    transform: translateX(-50%) translateY(-20px);
+    transform: translateX(-50%) translateY(-20px) scale(0.8);
   }
-  to {
+  60% {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(2px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
 .dice-toast-total {
-  font-size: 2em;
+  font-size: 2.2em;
   font-weight: bold;
   color: var(--global-accent);
   line-height: 1;
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  animation: total-tumble-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes total-tumble-in {
+  0% {
+    opacity: 0;
+    transform: scale(2.5) rotate(15deg);
+    filter: blur(8px);
+  }
+  35% {
+    opacity: 0.6;
+    filter: blur(3px);
+  }
+  65% {
+    transform: scale(1.08) rotate(-3deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+  85% {
+    transform: scale(0.97) rotate(1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+    filter: blur(0);
+  }
 }
 
 .dice-toast-detail {
-  font-size: 0.75em;
-  color: #999;
+  font-size: 0.8em;
+  color: #aaa;
+  letter-spacing: 0.5px;
+  animation: detail-slide-in 0.3s ease 0.35s both;
+}
+
+@keyframes detail-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dice-toast-label {
   font-size: 0.65em;
-  color: #666;
+  color: rgba(212, 175, 55, 0.45);
   text-transform: uppercase;
+  letter-spacing: 1.5px;
+  animation: detail-slide-in 0.25s ease 0.45s both;
+}
+
+/* ═══════════════════════════════════════
+   Exploding dice
+   ═══════════════════════════════════════ */
+
+.dice-toast--exploded {
+  background: rgba(20, 8, 0, 0.93);
+  border: 2px solid #ff6a00;
+  border-radius: 10px;
+  padding: 14px 28px;
+  max-width: min(90vw, 400px);
+  animation: dice-toast-explode-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    explosion-glow 1.5s ease-in-out 0.4s infinite alternate;
+}
+
+/* Screen flash on explosion */
+.dice-toast--exploded::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(255, 100, 0, 0.2),
+    transparent 60%
+  );
+  pointer-events: none;
+  animation: explosion-flash 0.8s ease-out forwards;
+  z-index: -1;
+}
+
+/* Spark particles */
+.dice-toast--exploded::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px rgba(255, 200, 0, 0.8),
+    20px -18px 0 0 rgba(255, 140, 0, 0.7),
+    -25px -12px 0 0 rgba(255, 100, 0, 0.6),
+    32px 8px 0 0 rgba(255, 200, 0, 0.5),
+    -22px 16px 0 0 rgba(255, 69, 0, 0.7),
+    14px 22px 0 0 rgba(255, 140, 0, 0.4),
+    -32px -22px 0 0 rgba(255, 200, 0, 0.6),
+    28px -6px 0 0 rgba(255, 180, 0, 0.5);
+  animation: sparks 0.8s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes dice-toast-explode-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+  70% {
+    transform: translateX(-52%) scale(1.02);
+  }
+  85% {
+    transform: translateX(-48%) scale(1.05);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes explosion-glow {
+  0% {
+    box-shadow:
+      0 0 10px rgba(255, 69, 0, 0.4),
+      0 0 20px rgba(255, 69, 0, 0.2);
+    border-color: #ff6a00;
+  }
+  100% {
+    box-shadow:
+      0 0 15px rgba(255, 140, 0, 0.6),
+      0 0 30px rgba(255, 69, 0, 0.3),
+      0 0 50px rgba(255, 69, 0, 0.1);
+    border-color: #ffd700;
+  }
+}
+
+@keyframes explosion-flash {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes sparks {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+/* Dice chain layout */
+.dice-toast-chain {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  min-height: 36px;
+}
+
+.dice-toast-chain-step {
+  display: flex;
+  align-items: center;
+}
+
+.dice-toast-chain-plus {
+  color: #ff8c00;
+  font-weight: bold;
+  font-size: 1em;
+  margin: 0 6px;
+  animation: die-pop-in 0.2s ease-out both;
+}
+
+/* Individual die badge */
+.dice-toast-die {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ccc;
+  font-weight: bold;
+  font-size: 1.2em;
+  font-family: 'Courier New', Courier, monospace;
+  animation: die-pop-in 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+/* Die that hit max and exploded */
+.dice-toast-die--max {
+  background: rgba(255, 69, 0, 0.25);
+  border-color: #ff8c00;
+  color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+  text-shadow: 0 0 8px rgba(255, 200, 0, 0.6);
+  animation: die-pop-in 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both,
+    die-max-pulse 0.6s ease-out 0.35s;
+}
+
+@keyframes die-pop-in {
+  0% {
+    transform: scale(0) rotate(-20deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+@keyframes die-max-pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 20px rgba(255, 69, 0, 0.8),
+      0 0 40px rgba(255, 140, 0, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+  }
+}
+
+/* Total with punch animation for explosions */
+.dice-toast-total--punch {
+  animation: total-punch-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes total-punch-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

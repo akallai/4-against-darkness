@@ -51,12 +51,19 @@
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .enc-status-badge.active {
-  background: rgba(212, 175, 55, 0.2);
+  background: rgba(212, 175, 55, 0.15);
   color: var(--global-accent);
-  border: 1px solid var(--global-accent);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+
+.enc-status-badge.active.all-dead {
+  background: rgba(212, 175, 55, 0.3);
+  border-color: var(--global-accent);
+  box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
 }
 
 button.enc-status-badge.done {
@@ -133,18 +140,41 @@ button.enc-status-badge.done:hover {
 }
 
 .enemy-pip {
-  display: block;
-  width: 22px;
-  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
   border: 2px solid var(--border);
   border-radius: 50%;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.enemy-pip:hover {
+  border-color: var(--global-accent);
+  box-shadow: 0 0 4px rgba(212, 175, 55, 0.2);
 }
 
 .enemy-pip.defeated {
-  background-color: var(--global-accent);
+  background: radial-gradient(circle at 40% 40%, rgba(255, 225, 120, 0.6), var(--global-accent));
   border-color: var(--global-accent);
-  box-shadow: 0 0 6px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  animation: pip-defeat 0.3s ease-out;
+}
+
+.enemy-pip.defeated::after {
+  content: '✕';
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+@keyframes pip-defeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
 }
 
 .enc-notes {

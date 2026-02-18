@@ -23,8 +23,20 @@ export function PartyCombatSummary() {
         })}
       </div>
       <div className="kill-counters">
-        <span className="kill-counter">Minions/Vermin: {partyStats.mv}</span>
-        <span className="kill-counter">Bosses/Weird: {partyStats.bw}</span>
+        <div className="kill-counter">
+          <span className="kill-icon">&#9876;</span>
+          <div className="kill-detail">
+            <span className="kill-label">Minions / Vermin</span>
+            <span className="kill-value">{partyStats.mv}</span>
+          </div>
+        </div>
+        <div className="kill-counter">
+          <span className="kill-icon">&#9760;</span>
+          <div className="kill-detail">
+            <span className="kill-label">Bosses / Weird</span>
+            <span className="kill-value">{partyStats.bw}</span>
+          </div>
+        </div>
       </div>
     </div>
   )
