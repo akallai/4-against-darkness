@@ -16,7 +16,7 @@ export function StatBox({ label, value, onChange, onIncrement, onDecrement, type
       <div className="stat-controls">
         {onDecrement && (
           <button className="stat-btn" onClick={onDecrement} title={`Decrease ${label}`}>
-            <img src="/btn_minus.png" alt="-" className="stat-icon" />
+            <span className="stat-icon">−</span>
           </button>
         )}
         <input
@@ -27,7 +27,7 @@ export function StatBox({ label, value, onChange, onIncrement, onDecrement, type
         />
         {onIncrement && (
           <button className="stat-btn" onClick={onIncrement} title={`Increase ${label}`}>
-            <img src="/btn_plus.png" alt="+" className="stat-icon" />
+            <span className="stat-icon">+</span>
           </button>
         )}
       </div>

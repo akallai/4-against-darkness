@@ -81,11 +81,11 @@ export function CharacterCard({
         <div className="header-right">
           <span className="lvl-label">Lv</span>
           <button className="arrow-btn" onClick={() => changeLvl(-1)}>
-            <img src="/arrow_down.png" alt="-" className="arrow-icon" />
+            <span className="arrow-icon">▼</span>
           </button>
           <span className="lvl-value">{character.lvl}</span>
           <button className="arrow-btn" onClick={() => changeLvl(1)}>
-            <img src="/arrow_up.png" alt="+" className="arrow-icon" />
+            <span className="arrow-icon">▲</span>
           </button>
         </div>
       </div>

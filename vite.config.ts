@@ -12,10 +12,6 @@ export default defineConfig({
         'dungeon_dark.png',
         'tavern_background.png',
         'parchment_texture.jpg',
-        'arrow_down.png',
-        'arrow_up.png',
-        'btn_minus.png',
-        'btn_plus.png',
       ],
       manifest: false, // Use public/manifest.json
       workbox: {
