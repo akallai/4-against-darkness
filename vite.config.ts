@@ -11,7 +11,6 @@ export default defineConfig({
       includeAssets: [
         'dungeon_dark.png',
         'tavern_background.png',
-        'parchment_texture.jpg',
       ],
       manifest: false, // Use public/manifest.json
       workbox: {

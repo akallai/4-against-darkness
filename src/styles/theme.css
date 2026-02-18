@@ -113,8 +113,6 @@ body.classic-mode .modal-content,
 body.classic-mode .enc-dice-panel,
 body.classic-mode .replacement-form {
   background-color: var(--classic-paper) !important;
-  background-image: url('/parchment_texture.jpg') !important;
-  background-size: cover !important;
   border: 2px solid var(--classic-border) !important;
   color: var(--classic-text) !important;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6) !important;
@@ -129,8 +127,6 @@ body.classic-mode .char-input-group,
 body.classic-mode .tavern-compact-box,
 body.classic-mode .replacement-form {
   background-color: var(--classic-paper) !important;
-  background-image: url('/parchment_texture.jpg') !important;
-  background-size: cover !important;
   color: var(--classic-ink) !important;
   border: 3px double rgba(160, 120, 60, 0.6) !important;
   border-radius: 0 !important;
