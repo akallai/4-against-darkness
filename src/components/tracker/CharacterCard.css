@@ -8,6 +8,32 @@
   min-height: 0;
 }
 
+.char-card.dragging {
+  opacity: 0.4;
+}
+
+.char-card.drag-over {
+  outline: 2px dashed var(--global-accent);
+  outline-offset: -2px;
+}
+
+.drag-handle {
+  cursor: grab;
+  font-size: 1.1em;
+  color: var(--global-accent);
+  opacity: 0.5;
+  user-select: none;
+  line-height: 1;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;

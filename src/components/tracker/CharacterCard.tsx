@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import type { Character } from '@/types'
 import { usePartyStore } from '@/stores/usePartyStore'
-import { useDragAndDrop } from '@/hooks/useDragAndDrop'
 import { StatBox } from '@/components/common/StatBox'
 import { EditableList } from '@/components/common/EditableList'
 import { SpellTraitList } from '@/components/common/SpellTraitList'
@@ -11,11 +10,21 @@ import './CharacterCard.css'
 interface CharacterCardProps {
   index: number
   character: Character
+  dragHandlers: Record<string, (e: React.DragEvent) => void>
+  handleHandlers: Record<string, unknown>
+  isDragged: boolean
+  isDragOver: boolean
 }
 
-export function CharacterCard({ index, character }: CharacterCardProps) {
+export function CharacterCard({
+  index,
+  character,
+  dragHandlers,
+  handleHandlers,
+  isDragged,
+  isDragOver,
+}: CharacterCardProps) {
   const updateCharacter = usePartyStore((s) => s.updateCharacter)
-  const { dragHandlers } = useDragAndDrop()
 
   const update = useCallback(
     (updates: Partial<Character>) => {
@@ -47,11 +56,14 @@ export function CharacterCard({ index, character }: CharacterCardProps) {
 
   return (
     <div
-      className="char-card"
+      className={`char-card${isDragged ? ' dragging' : ''}${isDragOver ? ' drag-over' : ''}`}
       style={{ borderTopColor: character.color }}
-      {...dragHandlers(index)}
+      {...dragHandlers}
     >
       <div className="card-header">
+        <span className="drag-handle" {...handleHandlers}>
+          ⠿
+        </span>
         <div className="header-left">
           <input
             className="char-name"

@@ -45,9 +45,26 @@ describe('rollDice', () => {
     }
   })
 
-  it('detail string matches rolls', () => {
+  it('detail string shows individual dice values', () => {
     const result = rollDice(2, 6)
-    expect(result.detail).toBe(result.rolls.join('+'))
+    expect(result.individualRolls).toHaveLength(2)
+    expect(result.detail).toBe(
+      result.individualRolls.map((dr) => String(dr[0])).join(' + ')
+    )
+  })
+
+  it('exploding detail shows each roll in the chain', () => {
+    let foundExploding = false
+    for (let i = 0; i < 500; i++) {
+      const result = rollDice(1, 6, true)
+      if (result.individualRolls[0]!.length > 1) {
+        foundExploding = true
+        expect(result.detail).toBe(result.individualRolls[0]!.join(' + '))
+        expect(result.individualRolls[0]![0]).toBe(6)
+        break
+      }
+    }
+    expect(foundExploding).toBe(true)
   })
 })
 

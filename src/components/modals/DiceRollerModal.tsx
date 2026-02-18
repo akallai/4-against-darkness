@@ -68,9 +68,7 @@ export function DiceRollerModal({ isOpen, onClose }: DiceRollerModalProps) {
         {result && (
           <div className="dice-col-result">
             <span className="dice-res-total">{result.data.total}</span>
-            {result.data.rolls.length > 1 && (
-              <span className="dice-res-detail">{result.data.detail}</span>
-            )}
+            <span className="dice-res-detail">{result.data.detail}</span>
             <span className="dice-res-label">{result.label}</span>
           </div>
         )}

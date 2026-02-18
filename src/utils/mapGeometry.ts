@@ -175,3 +175,14 @@ export function subtractDoors(a: AbsoluteDoor[], b: AbsoluteDoor[]): AbsoluteDoo
   const bSet = new Set(b.map(doorKey))
   return a.filter((d) => !bSet.has(doorKey(d)))
 }
+
+/** Normalize a door to canonical form: always right (not left) and bottom (not top) */
+export function canonicalizeDoor(d: AbsoluteDoor): AbsoluteDoor {
+  if (d.side === 'left' && d.col > 0) {
+    return { col: d.col - 1, row: d.row, side: 'right', ...(d.type ? { type: d.type } : {}) }
+  }
+  if (d.side === 'top' && d.row > 0) {
+    return { col: d.col, row: d.row - 1, side: 'bottom', ...(d.type ? { type: d.type } : {}) }
+  }
+  return d
+}
