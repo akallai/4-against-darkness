@@ -45,7 +45,7 @@ export function SpellTraitList({ title, items, onItemsChange, maxPips = 3, color
   const setPips = (index: number, used: number, total: number) => {
     const item = items[index]!
     // Strip old pip data, append new
-    const baseDet = item.det.replace(/\s*pips:\d+\/\d+/, '')
+    const baseDet = item.det.replace(/ ?pips:\d+\/\d+/, '')
     const newDet = `${baseDet} pips:${used}/${total}`.trim()
     updateItem(index, 'det', newDet)
   }
@@ -113,7 +113,7 @@ export function SpellTraitList({ title, items, onItemsChange, maxPips = 3, color
               {expanded[i] && (
                 <AutoTextarea
                   className="list-details"
-                  value={item.det.replace(/\s*pips:\d+\/\d+/, '')}
+                  value={item.det.replace(/ ?pips:\d+\/\d+/, '')}
                   onChange={(val) => {
                     const pipPart = item.det.match(/pips:\d+\/\d+/)
                     const newDet = pipPart ? `${val} ${pipPart[0]}` : val
