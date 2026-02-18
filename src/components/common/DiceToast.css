@@ -1,0 +1,47 @@
+.dice-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 24px;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--global-accent);
+  border-radius: 8px;
+  cursor: pointer;
+  animation: dice-toast-in 0.25s ease-out;
+  pointer-events: auto;
+}
+
+@keyframes dice-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.dice-toast-total {
+  font-size: 2em;
+  font-weight: bold;
+  color: var(--global-accent);
+  line-height: 1;
+}
+
+.dice-toast-detail {
+  font-size: 0.75em;
+  color: #999;
+}
+
+.dice-toast-label {
+  font-size: 0.65em;
+  color: #666;
+  text-transform: uppercase;
+}
