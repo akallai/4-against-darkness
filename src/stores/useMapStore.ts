@@ -8,6 +8,7 @@ import {
   subtractCoords,
   mergeDoors,
   subtractDoors,
+  canonicalizeDoor,
 } from '@/utils/mapGeometry'
 
 const MAX_UNDO = 20
@@ -181,8 +182,9 @@ export const useMapStore = create<MapState>()((set, get) => ({
 
   toggleOpening: (col, row, side, type) => {
     const state = get()
+    const canonical = canonicalizeDoor({ col, row, side, type })
     const idx = state.mapData.doors.findIndex(
-      (d) => d.col === col && d.row === row && d.side === side,
+      (d) => d.col === canonical.col && d.row === canonical.row && d.side === canonical.side,
     )
     const newDoors = [...state.mapData.doors]
     if (idx >= 0) {
@@ -193,10 +195,10 @@ export const useMapStore = create<MapState>()((set, get) => ({
         newDoors.splice(idx, 1)
       } else {
         // Different type → replace
-        newDoors[idx] = { col, row, side, type }
+        newDoors[idx] = canonical
       }
     } else {
-      newDoors.push({ col, row, side, type })
+      newDoors.push(canonical)
     }
     set({
       undoStack: pushUndo(state.undoStack, state.mapData),
