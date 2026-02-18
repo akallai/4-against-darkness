@@ -125,6 +125,16 @@ export function FooterBar({ onSave, onQuit }: FooterBarProps) {
           <GameIcon name="crystal-ball" />
           <span className="footer-icon-label">Tools</span>
         </button>
+        <a
+          className="footer-icon-btn"
+          href="https://akallai.github.io/four-against-darkness-shop/"
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Shop"
+        >
+          <GameIcon name="shop" />
+          <span className="footer-icon-label">Shop</span>
+        </a>
 
         <span className="footer-divider" />
 
