@@ -177,7 +177,6 @@ body.classic-mode .btn-journal-gold,
 body.classic-mode .btn-gold-dashed,
 body.classic-mode .setup-footer-btn,
 body.classic-mode .btn-oracle,
-body.classic-mode .btn-dice,
 body.classic-mode .btn-fs {
   background-color: var(--classic-accent) !important;
   color: #fff !important;
