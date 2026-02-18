@@ -5,6 +5,7 @@ import { useGameSession } from '@/hooks/useGameSession'
 import { FooterBar } from '@/components/layout/FooterBar'
 import { MapToolbar } from './MapToolbar'
 import { MapGrid } from './MapGrid'
+import { MapTileControls } from './MapTileControls'
 import { TileCatalog } from './TileCatalog'
 import './MapScreen.css'
 
@@ -13,6 +14,7 @@ export function MapScreen() {
   const { save, saveAndQuit } = useGameSession()
 
   const cycleRotation = useMapStore((s) => s.cycleRotation)
+  const cycleRotationBack = useMapStore((s) => s.cycleRotationBack)
   const toggleMirror = useMapStore((s) => s.toggleMirror)
   const undo = useMapStore((s) => s.undo)
 
@@ -20,7 +22,10 @@ export function MapScreen() {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
-      if (e.key === 'r' || e.key === 'R') {
+      if (e.key === 'e' || e.key === 'E') {
+        e.preventDefault()
+        cycleRotationBack()
+      } else if (e.key === 'r' || e.key === 'R') {
         e.preventDefault()
         cycleRotation()
       } else if (e.key === 'f' || e.key === 'F') {
@@ -33,12 +38,13 @@ export function MapScreen() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [cycleRotation, toggleMirror, undo])
+  }, [cycleRotation, cycleRotationBack, toggleMirror, undo])
 
   return (
     <div className="map-screen">
       <MapToolbar onBack={() => setScreen('tracker')} />
       <div className="map-main">
+        <MapTileControls />
         <MapGrid />
         <TileCatalog />
       </div>

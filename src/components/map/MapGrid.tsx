@@ -2,7 +2,7 @@ import { useMemo, useCallback, useRef } from 'react'
 import { useMapStore } from '@/stores/useMapStore'
 import { MAP_COLS, MAP_ROWS } from '@/types/map'
 import type { DoorSide, WallOpeningType } from '@/types/map'
-import { stampTile } from '@/utils/mapGeometry'
+import { stampTile, transformTile } from '@/utils/mapGeometry'
 import { getTileById } from '@/data/tileTemplates'
 import './MapGrid.css'
 
@@ -59,21 +59,43 @@ export function MapGrid() {
     return map
   }, [mapData.labels])
 
-  // Ghost cells for tile preview
-  const ghostCells = useMemo(() => {
-    if (activeTool !== 'place' || !selectedTemplateId || !hoverCell) return new Set<string>()
+  // Compute center offset for the selected tile so cursor is at center, not top-left
+  const tileOffset = useMemo(() => {
+    if (!selectedTemplateId) return { col: 0, row: 0 }
     const template = getTileById(selectedTemplateId)
-    if (!template) return new Set<string>()
-    const { cells } = stampTile(template, hoverCell.col, hoverCell.row, rotation, mirrored)
-    return new Set(cells.map((c) => `${c.col},${c.row}`))
-  }, [activeTool, selectedTemplateId, hoverCell, rotation, mirrored])
+    if (!template) return { col: 0, row: 0 }
+    const { width, height } = transformTile(template, rotation, mirrored)
+    return { col: -Math.floor(width / 2), row: -Math.floor(height / 2) }
+  }, [selectedTemplateId, rotation, mirrored])
+
+  // Ghost cells and doors for tile preview
+  const { ghostCells, ghostDoorMap } = useMemo(() => {
+    if (activeTool !== 'place' || !selectedTemplateId || !hoverCell) {
+      return { ghostCells: new Set<string>(), ghostDoorMap: new Map<string, Map<DoorSide, WallOpeningType>>() }
+    }
+    const template = getTileById(selectedTemplateId)
+    if (!template) {
+      return { ghostCells: new Set<string>(), ghostDoorMap: new Map<string, Map<DoorSide, WallOpeningType>>() }
+    }
+    const originCol = hoverCell.col + tileOffset.col
+    const originRow = hoverCell.row + tileOffset.row
+    const { cells, doors } = stampTile(template, originCol, originRow, rotation, mirrored)
+    const cellSet = new Set(cells.map((c) => `${c.col},${c.row}`))
+    const doorMap = new Map<string, Map<DoorSide, WallOpeningType>>()
+    for (const d of doors) {
+      const key = `${d.col},${d.row}`
+      if (!doorMap.has(key)) doorMap.set(key, new Map())
+      doorMap.get(key)!.set(d.side, d.type ?? 'door')
+    }
+    return { ghostCells: cellSet, ghostDoorMap: doorMap }
+  }, [activeTool, selectedTemplateId, hoverCell, rotation, mirrored, tileOffset])
 
   const handleCellMouseDown = useCallback(
     (col: number, row: number, e: React.MouseEvent) => {
       e.preventDefault()
       if (activeTool === 'place' && selectedTemplateId) {
         const template = getTileById(selectedTemplateId)
-        if (template) placeTile(template, col, row)
+        if (template) placeTile(template, col + tileOffset.col, row + tileOffset.row)
       } else if (activeTool === 'draw') {
         pushUndoForDraw()
         setIsDrawing(true)
@@ -105,7 +127,7 @@ export function MapGrid() {
         }
       }
     },
-    [activeTool, selectedTemplateId, placeTile, drawCell, eraseCell, toggleOpening, addLabel, deleteLabel, removePlacedTile, pushUndoForDraw, setIsDrawing, labelMap, mapData.placedTiles],
+    [activeTool, selectedTemplateId, placeTile, drawCell, eraseCell, toggleOpening, addLabel, deleteLabel, removePlacedTile, pushUndoForDraw, setIsDrawing, labelMap, mapData.placedTiles, tileOffset],
   )
 
   const handleCellMouseEnter = useCallback(
@@ -138,6 +160,8 @@ export function MapGrid() {
         const doors = doorMap.get(key)
         const labels = labelMap.get(key)
 
+        const ghostDoors = ghostDoorMap.get(key)
+
         // Compute wall classes for floor cells
         let wallClasses = ''
         if (isFloor) {
@@ -145,15 +169,21 @@ export function MapGrid() {
           if (c === MAP_COLS - 1 || !cellSet.has(`${c + 1},${r}`)) wallClasses += ' wall-right'
           if (r === MAP_ROWS - 1 || !cellSet.has(`${c},${r + 1}`)) wallClasses += ' wall-bottom'
           if (c === 0 || !cellSet.has(`${c - 1},${r}`)) wallClasses += ' wall-left'
+        } else if (isGhost) {
+          if (r === 0 || !ghostCells.has(`${c},${r - 1}`)) wallClasses += ' wall-top'
+          if (c === MAP_COLS - 1 || !ghostCells.has(`${c + 1},${r}`)) wallClasses += ' wall-right'
+          if (r === MAP_ROWS - 1 || !ghostCells.has(`${c},${r + 1}`)) wallClasses += ' wall-bottom'
+          if (c === 0 || !ghostCells.has(`${c - 1},${r}`)) wallClasses += ' wall-left'
         }
 
         // Opening class overrides (both doors and passages create a gap in the wall)
         let doorClasses = ''
-        if (doors) {
-          if (doors.has('top')) doorClasses += ' door-top'
-          if (doors.has('right')) doorClasses += ' door-right'
-          if (doors.has('bottom')) doorClasses += ' door-bottom'
-          if (doors.has('left')) doorClasses += ' door-left'
+        const activeDoors = isGhost ? ghostDoors : doors
+        if (activeDoors) {
+          if (activeDoors.has('top')) doorClasses += ' door-top'
+          if (activeDoors.has('right')) doorClasses += ' door-right'
+          if (activeDoors.has('bottom')) doorClasses += ' door-bottom'
+          if (activeDoors.has('left')) doorClasses += ' door-left'
         }
 
         result.push(
@@ -163,7 +193,7 @@ export function MapGrid() {
             onMouseDown={(e) => handleCellMouseDown(c, r, e)}
             onMouseEnter={() => handleCellMouseEnter(c, r)}
           >
-            {doors && Array.from(doors.entries()).map(([side, type]) => (
+            {activeDoors && Array.from(activeDoors.entries()).map(([side, type]) => (
               type === 'door'
                 ? <span key={side} className={`door-marker door-marker-${side}`} />
                 : <span key={side} className={`passage-marker passage-marker-${side}`} />
@@ -182,7 +212,7 @@ export function MapGrid() {
       }
     }
     return result
-  }, [cellSet, ghostCells, doorMap, labelMap, activeTool, handleCellMouseDown, handleCellMouseEnter])
+  }, [cellSet, ghostCells, ghostDoorMap, doorMap, labelMap, activeTool, handleCellMouseDown, handleCellMouseEnter])
 
   return (
     <div className="map-grid-wrapper">

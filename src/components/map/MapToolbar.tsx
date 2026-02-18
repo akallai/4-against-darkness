@@ -18,13 +18,9 @@ interface MapToolbarProps {
 
 export function MapToolbar({ onBack }: MapToolbarProps) {
   const activeTool = useMapStore((s) => s.activeTool)
-  const rotation = useMapStore((s) => s.rotation)
-  const mirrored = useMapStore((s) => s.mirrored)
   const undoStack = useMapStore((s) => s.undoStack)
 
   const setActiveTool = useMapStore((s) => s.setActiveTool)
-  const cycleRotation = useMapStore((s) => s.cycleRotation)
-  const toggleMirror = useMapStore((s) => s.toggleMirror)
   const undo = useMapStore((s) => s.undo)
   const clearMap = useMapStore((s) => s.clearMap)
 
@@ -44,20 +40,6 @@ export function MapToolbar({ onBack }: MapToolbarProps) {
             {t.label}
           </button>
         ))}
-      </div>
-
-      <div className="map-toolbar-divider" />
-
-      <div className="map-toolbar-group">
-        <button className="map-tool-btn" onClick={cycleRotation}>
-          Rot {rotation}°
-        </button>
-        <button
-          className={`map-tool-btn${mirrored ? ' mirror-on' : ''}`}
-          onClick={toggleMirror}
-        >
-          Mirror
-        </button>
       </div>
 
       <div className="map-toolbar-divider" />

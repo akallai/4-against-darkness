@@ -48,11 +48,6 @@
   cursor: not-allowed;
 }
 
-.map-tool-btn.mirror-on {
-  border-color: var(--global-accent);
-  color: var(--global-accent);
-}
-
 .map-back-btn {
   padding: 4px 10px;
   font-size: 0.78em;

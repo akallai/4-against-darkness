@@ -30,6 +30,7 @@ interface MapState {
   setActiveTool: (tool: MapTool) => void
   setSelectedTemplate: (id: number | null) => void
   cycleRotation: () => void
+  cycleRotationBack: () => void
   toggleMirror: () => void
   setHoverCell: (cell: GridCoord | null) => void
 
@@ -95,6 +96,8 @@ export const useMapStore = create<MapState>()((set, get) => ({
   setSelectedTemplate: (id) => set({ selectedTemplateId: id, activeTool: 'place' }),
   cycleRotation: () =>
     set((s) => ({ rotation: ((s.rotation + 90) % 360) as Rotation })),
+  cycleRotationBack: () =>
+    set((s) => ({ rotation: ((s.rotation + 270) % 360) as Rotation })),
   toggleMirror: () => set((s) => ({ mirrored: !s.mirrored })),
   setHoverCell: (cell) => set({ hoverCell: cell }),
 
