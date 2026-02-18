@@ -37,23 +37,25 @@ export function MapGrid() {
     return set
   }, [mapData.cells])
 
-  // Build door lookup map: cell key → Map<side, openingType>
-  // For each canonical door, also inject the mirror entry into the neighbor cell
+  // Build door lookup map: cell key → Map<side, { type, source }>
+  // source=true for the canonical entry (renders marker), source=false for the mirror (CSS class only)
   const doorMap = useMemo(() => {
-    const map = new Map<string, Map<DoorSide, WallOpeningType>>()
-    const addEntry = (col: number, row: number, side: DoorSide, type: WallOpeningType) => {
+    const map = new Map<string, Map<DoorSide, { type: WallOpeningType; source: boolean }>>()
+    const addEntry = (col: number, row: number, side: DoorSide, type: WallOpeningType, source: boolean) => {
       const key = `${col},${row}`
       if (!map.has(key)) map.set(key, new Map())
-      map.get(key)!.set(side, type)
+      const cellMap = map.get(key)!
+      // Don't overwrite a source entry with a mirror entry
+      if (!cellMap.has(side) || source) cellMap.set(side, { type, source })
     }
     for (const d of mapData.doors) {
       const type = d.type ?? 'door'
-      addEntry(d.col, d.row, d.side, type)
-      // Mirror entry for the neighbor cell
-      if (d.side === 'right') addEntry(d.col + 1, d.row, 'left', type)
-      else if (d.side === 'bottom') addEntry(d.col, d.row + 1, 'top', type)
-      else if (d.side === 'left') addEntry(d.col - 1, d.row, 'right', type)
-      else if (d.side === 'top') addEntry(d.col, d.row - 1, 'bottom', type)
+      addEntry(d.col, d.row, d.side, type, true)
+      // Mirror entry for the neighbor cell (CSS class only, no marker)
+      if (d.side === 'right') addEntry(d.col + 1, d.row, 'left', type, false)
+      else if (d.side === 'bottom') addEntry(d.col, d.row + 1, 'top', type, false)
+      else if (d.side === 'left') addEntry(d.col - 1, d.row, 'right', type, false)
+      else if (d.side === 'top') addEntry(d.col, d.row - 1, 'bottom', type, false)
     }
     return map
   }, [mapData.doors])
@@ -81,29 +83,30 @@ export function MapGrid() {
   // Ghost cells and doors for tile preview
   const { ghostCells, ghostDoorMap } = useMemo(() => {
     if (activeTool !== 'place' || !selectedTemplateId || !hoverCell) {
-      return { ghostCells: new Set<string>(), ghostDoorMap: new Map<string, Map<DoorSide, WallOpeningType>>() }
+      return { ghostCells: new Set<string>(), ghostDoorMap: new Map<string, Map<DoorSide, { type: WallOpeningType; source: boolean }>>() }
     }
     const template = getTileById(selectedTemplateId)
     if (!template) {
-      return { ghostCells: new Set<string>(), ghostDoorMap: new Map<string, Map<DoorSide, WallOpeningType>>() }
+      return { ghostCells: new Set<string>(), ghostDoorMap: new Map<string, Map<DoorSide, { type: WallOpeningType; source: boolean }>>() }
     }
     const originCol = hoverCell.col + tileOffset.col
     const originRow = hoverCell.row + tileOffset.row
     const { cells, doors } = stampTile(template, originCol, originRow, rotation, mirrored)
     const cellSet = new Set(cells.map((c) => `${c.col},${c.row}`))
-    const doorMap = new Map<string, Map<DoorSide, WallOpeningType>>()
-    const addEntry = (col: number, row: number, side: DoorSide, type: WallOpeningType) => {
+    const doorMap = new Map<string, Map<DoorSide, { type: WallOpeningType; source: boolean }>>()
+    const addEntry = (col: number, row: number, side: DoorSide, type: WallOpeningType, source: boolean) => {
       const key = `${col},${row}`
       if (!doorMap.has(key)) doorMap.set(key, new Map())
-      doorMap.get(key)!.set(side, type)
+      const cellMap = doorMap.get(key)!
+      if (!cellMap.has(side) || source) cellMap.set(side, { type, source })
     }
     for (const d of doors) {
       const type = d.type ?? 'door'
-      addEntry(d.col, d.row, d.side, type)
-      if (d.side === 'right') addEntry(d.col + 1, d.row, 'left', type)
-      else if (d.side === 'bottom') addEntry(d.col, d.row + 1, 'top', type)
-      else if (d.side === 'left') addEntry(d.col - 1, d.row, 'right', type)
-      else if (d.side === 'top') addEntry(d.col, d.row - 1, 'bottom', type)
+      addEntry(d.col, d.row, d.side, type, true)
+      if (d.side === 'right') addEntry(d.col + 1, d.row, 'left', type, false)
+      else if (d.side === 'bottom') addEntry(d.col, d.row + 1, 'top', type, false)
+      else if (d.side === 'left') addEntry(d.col - 1, d.row, 'right', type, false)
+      else if (d.side === 'top') addEntry(d.col, d.row - 1, 'bottom', type, false)
     }
     return { ghostCells: cellSet, ghostDoorMap: doorMap }
   }, [activeTool, selectedTemplateId, hoverCell, rotation, mirrored, tileOffset])
@@ -211,10 +214,12 @@ export function MapGrid() {
             onMouseDown={(e) => handleCellMouseDown(c, r, e)}
             onMouseEnter={() => handleCellMouseEnter(c, r)}
           >
-            {activeDoors && Array.from(activeDoors.entries()).map(([side, type]) => (
-              type === 'door'
-                ? <span key={side} className={`door-marker door-marker-${side}`} />
-                : <span key={side} className={`passage-marker passage-marker-${side}`} />
+            {activeDoors && Array.from(activeDoors.entries()).map(([side, { type, source }]) => (
+              (source || isGhost)
+                ? type === 'door'
+                  ? <span key={side} className={`door-marker door-marker-${side}`} />
+                  : <span key={side} className={`passage-marker passage-marker-${side}`} />
+                : null
             ))}
             {labels?.map((l) => (
               <span
