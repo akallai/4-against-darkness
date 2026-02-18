@@ -97,7 +97,7 @@ body.classic-mode {
 }
 
 body.classic-mode .app-background {
-  background-image: url('/tavern_background.jpg') !important;
+  background-image: url('/tavern_background.png') !important;
   background-size: cover !important;
   background-position: center !important;
   opacity: 1 !important;

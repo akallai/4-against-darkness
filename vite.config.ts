@@ -9,8 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       includeAssets: [
-        'dungeon_dark.jpg',
-        'tavern_background.jpg',
+        'dungeon_dark.png',
+        'tavern_background.png',
         'parchment_texture.jpg',
         'arrow_down.png',
         'arrow_up.png',

@@ -130,4 +130,4 @@ Tests live alongside source files (`*.test.ts`). Current coverage: stores (`useP
 
 ## Assets
 
-Static images in `public/`: `dungeon_dark.jpg`, `tavern_background.jpg`, `parchment_texture.jpg` (backgrounds/textures), `arrow_*.png`, `btn_*.png` (UI icons). PWA manifest at `public/manifest.json`.
+Static images in `public/`: `dungeon_dark.png`, `tavern_background.png`, `parchment_texture.jpg` (backgrounds/textures), `arrow_*.png`, `btn_*.png` (UI icons). PWA manifest at `public/manifest.json`.
