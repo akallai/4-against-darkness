@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 
 interface UseLongPressOptions {
   onLongPress: () => void
@@ -40,6 +40,14 @@ export function useLongPress({ onLongPress, onClick, threshold = 500 }: UseLongP
     clear()
     firedRef.current = true // prevent onClick from firing
   }, [clear])
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current !== null) {
+        clearTimeout(timerRef.current)
+      }
+    }
+  }, [])
 
   return { onPointerDown, onPointerUp, onPointerLeave }
 }

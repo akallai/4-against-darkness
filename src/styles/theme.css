@@ -177,6 +177,7 @@ body.classic-mode .btn-journal-gold,
 body.classic-mode .btn-gold-dashed,
 body.classic-mode .setup-footer-btn,
 body.classic-mode .btn-oracle,
+body.classic-mode .btn-dice-inline,
 body.classic-mode .btn-fs {
   background-color: var(--classic-accent) !important;
   color: #fff !important;
@@ -184,6 +185,11 @@ body.classic-mode .btn-fs {
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.4) !important;
   text-transform: uppercase;
   font-size: 0.8em;
+}
+
+body.classic-mode .btn-dice-inline {
+  border: 2px dotted #000 !important;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 body.classic-mode .btn-main:active {
