@@ -24,14 +24,14 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
     completeEncounter(encounter.id, outcome)
     if (outcome === 'victory') {
       const stat = encounter.category === 'minion' ? 'mv' : 'bw'
-      incrementStat(stat, total)
+      incrementStat(stat)
     }
   }
 
   const handleReopen = () => {
     if (encounter.outcome === 'victory') {
       const stat = encounter.category === 'minion' ? 'mv' : 'bw'
-      incrementStat(stat, -total)
+      incrementStat(stat, -1)
     }
     updateEncounter(encounter.id, { isCompleted: false, outcome: '' })
   }

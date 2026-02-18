@@ -7,6 +7,7 @@
 
 .encounters-list {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 8px;
   display: flex;
@@ -21,4 +22,5 @@
   padding: 8px;
   background: var(--bg-color);
   border-top: 1px solid var(--border);
+  flex-shrink: 0;
 }

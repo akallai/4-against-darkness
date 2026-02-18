@@ -35,7 +35,6 @@ export const useEncounterStore = create<EncounterState>()((set) => ({
   addEncounter: (encounter) =>
     set((state) => ({
       encounters: [
-        ...state.encounters,
         {
           ...encounter,
           id: Date.now(),
@@ -45,6 +44,7 @@ export const useEncounterStore = create<EncounterState>()((set) => ({
           isCompleted: false,
           outcome: '',
         },
+        ...state.encounters,
       ],
     })),
 
@@ -82,7 +82,7 @@ export const useEncounterStore = create<EncounterState>()((set) => ({
         // Auto-complete when all enemies are defeated
         if (newStatus.every(Boolean) && !e.isCompleted) {
           const stat = e.category === 'minion' ? 'mv' : 'bw'
-          usePartyStore.getState().incrementStat(stat, e.count)
+          usePartyStore.getState().incrementStat(stat)
           return { ...e, status: newStatus, isCompleted: true, outcome: 'victory' }
         }
         return { ...e, status: newStatus }

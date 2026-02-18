@@ -78,8 +78,8 @@ describe('useEncounterStore', () => {
     expect(enc.status).toEqual([true, true, true])
     expect(enc.isCompleted).toBe(true)
     expect(enc.outcome).toBe('victory')
-    // Should have incremented minion victories by count
-    expect(usePartyStore.getState().partyStats.mv).toBe(3)
+    // Should have incremented minion victories once per encounter
+    expect(usePartyStore.getState().partyStats.mv).toBe(1)
   })
 
   it('auto-completes boss encounters and increments bw stat', () => {
