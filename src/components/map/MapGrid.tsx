@@ -38,12 +38,22 @@ export function MapGrid() {
   }, [mapData.cells])
 
   // Build door lookup map: cell key → Map<side, openingType>
+  // For each canonical door, also inject the mirror entry into the neighbor cell
   const doorMap = useMemo(() => {
     const map = new Map<string, Map<DoorSide, WallOpeningType>>()
-    for (const d of mapData.doors) {
-      const key = `${d.col},${d.row}`
+    const addEntry = (col: number, row: number, side: DoorSide, type: WallOpeningType) => {
+      const key = `${col},${row}`
       if (!map.has(key)) map.set(key, new Map())
-      map.get(key)!.set(d.side, d.type ?? 'door')
+      map.get(key)!.set(side, type)
+    }
+    for (const d of mapData.doors) {
+      const type = d.type ?? 'door'
+      addEntry(d.col, d.row, d.side, type)
+      // Mirror entry for the neighbor cell
+      if (d.side === 'right') addEntry(d.col + 1, d.row, 'left', type)
+      else if (d.side === 'bottom') addEntry(d.col, d.row + 1, 'top', type)
+      else if (d.side === 'left') addEntry(d.col - 1, d.row, 'right', type)
+      else if (d.side === 'top') addEntry(d.col, d.row - 1, 'bottom', type)
     }
     return map
   }, [mapData.doors])
@@ -82,10 +92,18 @@ export function MapGrid() {
     const { cells, doors } = stampTile(template, originCol, originRow, rotation, mirrored)
     const cellSet = new Set(cells.map((c) => `${c.col},${c.row}`))
     const doorMap = new Map<string, Map<DoorSide, WallOpeningType>>()
-    for (const d of doors) {
-      const key = `${d.col},${d.row}`
+    const addEntry = (col: number, row: number, side: DoorSide, type: WallOpeningType) => {
+      const key = `${col},${row}`
       if (!doorMap.has(key)) doorMap.set(key, new Map())
-      doorMap.get(key)!.set(d.side, d.type ?? 'door')
+      doorMap.get(key)!.set(side, type)
+    }
+    for (const d of doors) {
+      const type = d.type ?? 'door'
+      addEntry(d.col, d.row, d.side, type)
+      if (d.side === 'right') addEntry(d.col + 1, d.row, 'left', type)
+      else if (d.side === 'bottom') addEntry(d.col, d.row + 1, 'top', type)
+      else if (d.side === 'left') addEntry(d.col - 1, d.row, 'right', type)
+      else if (d.side === 'top') addEntry(d.col, d.row - 1, 'bottom', type)
     }
     return { ghostCells: cellSet, ghostDoorMap: doorMap }
   }, [activeTool, selectedTemplateId, hoverCell, rotation, mirrored, tileOffset])
