@@ -187,7 +187,8 @@ export function canonicalizeDoor(d: AbsoluteDoor): AbsoluteDoor {
   return d
 }
 
-/** Compute empty cells that should be blacked out (enclosed by floor cells, no door access) */
+/** Compute empty cells that should be blacked out (enclosed by floor cells, no door access).
+ *  The map edge is treated as a wall — pockets between floor cells and the boundary are enclosed. */
 export function computeBlackoutCells(
   cells: GridCoord[],
   doors: AbsoluteDoor[],
@@ -199,7 +200,6 @@ export function computeBlackoutCells(
   for (const c of cells) floorSet.add(`${c.col},${c.row}`)
 
   // 2. Build door lookup with both canonical and mirror sides
-  // Each entry is "col,row,side" — stores both the door's cell+side and the neighbor's cell+opposite side
   const doorSet = new Set<string>()
   for (const d of doors) {
     doorSet.add(`${d.col},${d.row},${d.side}`)
@@ -209,36 +209,7 @@ export function computeBlackoutCells(
     else if (d.side === 'top') doorSet.add(`${d.col},${d.row - 1},bottom`)
   }
 
-  // 3. BFS from all empty cells on the map boundary
-  const reachable = new Set<string>()
-  const queue: [number, number][] = []
-  for (let c = 0; c < cols; c++) {
-    for (let r = 0; r < rows; r++) {
-      if (c === 0 || c === cols - 1 || r === 0 || r === rows - 1) {
-        const key = `${c},${r}`
-        if (!floorSet.has(key)) {
-          reachable.add(key)
-          queue.push([c, r])
-        }
-      }
-    }
-  }
-
-  const deltas: [number, number][] = [[0, -1], [1, 0], [0, 1], [-1, 0]]
-  while (queue.length > 0) {
-    const [cx, cy] = queue.shift()!
-    for (const [dx, dy] of deltas) {
-      const nx = cx + dx
-      const ny = cy + dy
-      if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue
-      const nkey = `${nx},${ny}`
-      if (reachable.has(nkey) || floorSet.has(nkey)) continue
-      reachable.add(nkey)
-      queue.push([nx, ny])
-    }
-  }
-
-  // 4. Find connected components of unreachable empty cells
+  // 3. Find connected components of all empty cells
   const visited = new Set<string>()
   const blackout = new Set<string>()
   const sides: [number, number, DoorSide][] = [[0, -1, 'top'], [1, 0, 'right'], [0, 1, 'bottom'], [-1, 0, 'left']]
@@ -246,39 +217,39 @@ export function computeBlackoutCells(
   for (let c = 0; c < cols; c++) {
     for (let r = 0; r < rows; r++) {
       const key = `${c},${r}`
-      if (floorSet.has(key) || reachable.has(key) || visited.has(key)) continue
+      if (floorSet.has(key) || visited.has(key)) continue
 
       // BFS to collect this component
       const component: string[] = []
-      const cQueue: [number, number][] = [[c, r]]
+      const queue: [number, number][] = [[c, r]]
       visited.add(key)
+      let bordersFloor = false
       let hasDoorAccess = false
 
-      while (cQueue.length > 0) {
-        const [cx, cy] = cQueue.shift()!
+      while (queue.length > 0) {
+        const [cx, cy] = queue.shift()!
         component.push(`${cx},${cy}`)
 
-        // Check each neighbor
         for (const [dx, dy, side] of sides) {
           const nx = cx + dx
           const ny = cy + dy
           if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue
           const nkey = `${nx},${ny}`
 
-          // If neighbor is a floor cell with a door on the shared edge → accessible
-          if (floorSet.has(nkey) && doorSet.has(`${cx},${cy},${side}`)) {
-            hasDoorAccess = true
-          }
-
-          // Continue BFS through empty unreachable cells
-          if (!floorSet.has(nkey) && !reachable.has(nkey) && !visited.has(nkey)) {
+          if (floorSet.has(nkey)) {
+            bordersFloor = true
+            if (doorSet.has(`${cx},${cy},${side}`)) {
+              hasDoorAccess = true
+            }
+          } else if (!visited.has(nkey)) {
             visited.add(nkey)
-            cQueue.push([nx, ny])
+            queue.push([nx, ny])
           }
         }
       }
 
-      if (!hasDoorAccess) {
+      // Blackout: enclosed by floor cells with no door/passage access
+      if (bordersFloor && !hasDoorAccess) {
         for (const k of component) blackout.add(k)
       }
     }

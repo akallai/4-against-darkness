@@ -66,10 +66,11 @@ describe('computeBlackoutCells', () => {
       { col: 1, row: 3 }, { col: 2, row: 3 }, { col: 3, row: 3 },
     ]
     const result = computeBlackoutCells(cells, [], COLS, ROWS)
+    // Interior void is blacked out
     expect(result.has('2,2')).toBe(true)
-    // Edge-reachable empty cells should NOT be blacked out
-    expect(result.has('0,0')).toBe(false)
-    expect(result.has('4,4')).toBe(false)
+    // Outside cells also blacked out (no doors on any wall, edge = wall)
+    expect(result.has('0,0')).toBe(true)
+    expect(result.has('4,4')).toBe(true)
   })
 
   it('does NOT black out enclosed void if a door faces into it', () => {
@@ -97,15 +98,31 @@ describe('computeBlackoutCells', () => {
     expect(result.has('2,2')).toBe(false)
   })
 
-  it('does not black out cells adjacent to a room touching the map edge', () => {
-    // Room in top-left corner: cells at (0,0), (1,0), (0,1), (1,1)
-    // No enclosed void because all surrounding empty cells reach the edge
+  it('does not black out outside space when a door faces into it', () => {
+    // Room in top-left corner with a door on its right wall facing outside
     const cells = [
       { col: 0, row: 0 }, { col: 1, row: 0 },
       { col: 0, row: 1 }, { col: 1, row: 1 },
     ]
-    const result = computeBlackoutCells(cells, [], COLS, ROWS)
+    const doors = [{ col: 1, row: 0, side: 'right' as const, type: 'door' as const }]
+    const result = computeBlackoutCells(cells, doors, COLS, ROWS)
     expect(result.size).toBe(0)
+  })
+
+  it('blacks out edge pocket enclosed by floor cells and map boundary', () => {
+    // Floor cells create a pocket in the top-right corner of a 5x5 grid:
+    // ...FF
+    // ...F.   ← (4,1) is empty, trapped between floor and edge
+    // ...FF
+    // .....
+    // .....
+    const cells = [
+      { col: 3, row: 0 }, { col: 4, row: 0 },
+      { col: 3, row: 1 },
+      { col: 3, row: 2 }, { col: 4, row: 2 },
+    ]
+    const result = computeBlackoutCells(cells, [], COLS, ROWS)
+    expect(result.has('4,1')).toBe(true)
   })
 
   it('blacks out only doorless enclosed regions when multiple exist', () => {

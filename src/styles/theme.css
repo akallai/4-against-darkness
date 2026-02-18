@@ -13,7 +13,7 @@
   --btn-hover: rgba(212, 175, 55, 0.15);
   --font-stack: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   --map-empty-bg: #1a1a1a;
-  --map-blackout-bg: #0a0a0a;
+  --map-blackout-bg: #000000;
   --map-floor-bg: #3a3a3a;
   --map-wall-color: #e0e0e0;
   --map-door-color: #ffdc73;
