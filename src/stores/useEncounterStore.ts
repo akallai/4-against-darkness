@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import type { Encounter, BestiaryEntry } from '@/types'
+import { usePartyStore } from './usePartyStore'
 
 interface EncounterState {
   encounters: Encounter[]
@@ -70,7 +71,19 @@ export const useEncounterStore = create<EncounterState>()((set) => ({
       encounters: state.encounters.map((e) => {
         if (e.id !== encounterId) return e
         const newStatus = [...e.status]
-        newStatus[enemyIndex] = !newStatus[enemyIndex]
+        if (newStatus[enemyIndex]) {
+          // Clicking a defeated pip: clear it and all after it
+          for (let i = enemyIndex; i < newStatus.length; i++) newStatus[i] = false
+        } else {
+          // Clicking an undefeated pip: fill it and all before it
+          for (let i = 0; i <= enemyIndex; i++) newStatus[i] = true
+        }
+        // Auto-complete when all enemies are defeated
+        if (newStatus.every(Boolean) && !e.isCompleted) {
+          const stat = e.category === 'minion' ? 'mv' : 'bw'
+          usePartyStore.getState().incrementStat(stat, e.count)
+          return { ...e, status: newStatus, isCompleted: true, outcome: 'victory' }
+        }
         return { ...e, status: newStatus }
       }),
     })),
