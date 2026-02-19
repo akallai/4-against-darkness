@@ -3,7 +3,18 @@ import './PartyCombatSummary.css'
 
 export function PartyCombatSummary() {
   const characters = usePartyStore((s) => s.characters)
+  const updateCharacter = usePartyStore((s) => s.updateCharacter)
   const partyStats = usePartyStore((s) => s.partyStats)
+
+  const changeHp = (index: number, delta: number) => {
+    const char = characters[index]
+    if (!char) return
+    const parts = char.hp.split('/')
+    const current = parseInt(parts[0] ?? '0', 10)
+    const max = parseInt(parts[1] ?? '0', 10)
+    const newCurrent = Math.max(0, current + delta)
+    updateCharacter(index, { hp: `${newCurrent}/${max}` })
+  }
 
   return (
     <div className="party-combat-summary">
@@ -14,7 +25,11 @@ export function PartyCombatSummary() {
             <div key={i} className="summ-card" style={{ borderTopColor: char.color }}>
               <span className="summ-name">{char.name}</span>
               <div className="summ-stats">
-                <span className="summ-hp-val">{char.hp}</span>
+                <div className="summ-hp-controls">
+                  <button className="summ-hp-btn" onClick={() => changeHp(i, -1)}>-</button>
+                  <span className="summ-hp-val">{char.hp}</span>
+                  <button className="summ-hp-btn" onClick={() => changeHp(i, 1)}>+</button>
+                </div>
                 <span className="summ-stat-val">A{char.atk}</span>
                 <span className="summ-stat-val">D{char.def}</span>
               </div>

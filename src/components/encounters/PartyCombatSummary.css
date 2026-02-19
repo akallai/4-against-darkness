@@ -37,6 +37,32 @@
   font-size: 0.7em;
 }
 
+.summ-hp-controls {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.summ-hp-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: #f44;
+  font-size: 0.75em;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.summ-hp-btn:active {
+  background: rgba(255, 68, 68, 0.3);
+}
+
 .summ-hp-val {
   color: #f44;
 }
