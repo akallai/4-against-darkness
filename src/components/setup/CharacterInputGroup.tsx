@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Character } from '@/types'
 import { usePartyStore } from '@/stores/usePartyStore'
+import { applyClassTemplate, CLASS_NAMES } from '@/utils/applyClassTemplate'
 import { EditableList } from '@/components/common/EditableList'
 import { AutoTextarea } from '@/components/common/AutoTextarea'
 import './CharacterInputGroup.css'
@@ -38,12 +39,38 @@ export function CharacterInputGroup({ index, character }: CharacterInputGroupPro
           value={character.name}
           onChange={(e) => update({ name: e.target.value })}
         />
-        <input
-          type="text"
-          placeholder="Class"
-          value={character.class}
-          onChange={(e) => update({ class: e.target.value })}
-        />
+        <select
+          value={CLASS_NAMES.includes(character.class) ? character.class : character.class === '' ? '' : '__custom__'}
+          onChange={(e) => {
+            const cls = e.target.value
+            if (cls === '__custom__') {
+              update({ class: ' ' })
+              return
+            }
+            const template = applyClassTemplate(cls)
+            if (template) {
+              update(template)
+              setShowDetails(true)
+            } else {
+              update({ class: cls })
+            }
+          }}
+        >
+          <option value="">— Select Class —</option>
+          {CLASS_NAMES.map((name) => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+          <option value="__custom__">Custom...</option>
+        </select>
+        {character.class !== '' && !CLASS_NAMES.includes(character.class) && (
+          <input
+            type="text"
+            placeholder="Custom Class"
+            value={character.class.trim()}
+            onChange={(e) => update({ class: e.target.value })}
+            autoFocus
+          />
+        )}
       </div>
 
       <button

@@ -35,7 +35,8 @@
   margin-bottom: 8px;
 }
 
-.input-row input {
+.input-row input,
+.input-row select {
   flex: 1;
 }
 

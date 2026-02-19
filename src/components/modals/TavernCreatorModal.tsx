@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Modal } from '@/components/common/Modal'
 import { useTavernStore } from '@/stores/useTavernStore'
 import type { TavernHero } from '@/stores/useTavernStore'
+import { applyClassTemplate, CLASS_NAMES } from '@/utils/applyClassTemplate'
 
 interface TavernCreatorModalProps {
   isOpen: boolean
@@ -24,31 +25,34 @@ export function TavernCreatorModal({ isOpen, onClose }: TavernCreatorModalProps)
 
   const handleCreate = () => {
     if (!name.trim()) return
+    const trimmedClass = charClass.trim()
+    const template = CLASS_NAMES.includes(trimmedClass)
+      ? applyClassTemplate(trimmedClass, lvl)
+      : undefined
     const hero: TavernHero = {
       tavernId: Date.now(),
       name: name.trim(),
-      class: charClass,
+      class: trimmedClass,
       lvl,
-      hp: hp || `${lvl}/` + `${lvl}`,
+      hp: hp || `${lvl}/${lvl}`,
       gp,
       atk,
       def,
       madness: 0,
       clues: 0,
-      rations: 0,
+      rations: template?.rations ?? 0,
       xp: 0,
       color,
-      lantern: false,
+      lantern: template?.lantern ?? false,
       bandaged: false,
-      gear: [],
-      spells: [],
-      abilities: [],
-      traits: [],
+      gear: template?.gear ?? [],
+      spells: template?.spells ?? [],
+      abilities: template?.abilities ?? [],
+      traits: template?.traits ?? [],
       milestones: [],
       notes: '',
     }
     addHero(hero)
-    // Reset form
     setName('')
     setCharClass('')
     setLvl(1)
@@ -63,7 +67,33 @@ export function TavernCreatorModal({ isOpen, onClose }: TavernCreatorModalProps)
     <Modal isOpen={isOpen} onClose={onClose} title="Create Tavern Hero">
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <input placeholder="Hero name" value={name} onChange={(e) => setName(e.target.value)} />
-        <input placeholder="Class" value={charClass} onChange={(e) => setCharClass(e.target.value)} />
+        <select
+          value={CLASS_NAMES.includes(charClass) ? charClass : charClass === '' ? '' : '__custom__'}
+          onChange={(e) => {
+            const cls = e.target.value
+            if (cls === '__custom__') {
+              setCharClass(' ')
+              return
+            }
+            setCharClass(cls)
+            const template = applyClassTemplate(cls, lvl)
+            if (template) {
+              if (template.hp) setHp(template.hp)
+              if (template.gp !== undefined) setGp(template.gp)
+              if (template.atk) setAtk(template.atk)
+              if (template.def) setDef(template.def)
+            }
+          }}
+        >
+          <option value="">— Select Class —</option>
+          {CLASS_NAMES.map((name) => (
+            <option key={name} value={name}>{name}</option>
+          ))}
+          <option value="__custom__">Custom...</option>
+        </select>
+        {charClass !== '' && !CLASS_NAMES.includes(charClass) && (
+          <input placeholder="Custom Class" value={charClass.trim()} onChange={(e) => setCharClass(e.target.value)} autoFocus />
+        )}
 
         <div style={{ display: 'flex', gap: '8px' }}>
           <label style={{ flex: 1, fontSize: '0.8em' }}>
