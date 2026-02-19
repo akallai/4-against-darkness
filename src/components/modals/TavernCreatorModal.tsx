@@ -25,13 +25,14 @@ export function TavernCreatorModal({ isOpen, onClose }: TavernCreatorModalProps)
 
   const handleCreate = () => {
     if (!name.trim()) return
-    const template = CLASS_NAMES.includes(charClass)
-      ? applyClassTemplate(charClass, lvl)
+    const trimmedClass = charClass.trim()
+    const template = CLASS_NAMES.includes(trimmedClass)
+      ? applyClassTemplate(trimmedClass, lvl)
       : undefined
     const hero: TavernHero = {
       tavernId: Date.now(),
       name: name.trim(),
-      class: charClass,
+      class: trimmedClass,
       lvl,
       hp: hp || `${lvl}/${lvl}`,
       gp,
@@ -67,11 +68,11 @@ export function TavernCreatorModal({ isOpen, onClose }: TavernCreatorModalProps)
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <input placeholder="Hero name" value={name} onChange={(e) => setName(e.target.value)} />
         <select
-          value={charClass}
+          value={CLASS_NAMES.includes(charClass) ? charClass : charClass === '' ? '' : '__custom__'}
           onChange={(e) => {
             const cls = e.target.value
             if (cls === '__custom__') {
-              setCharClass('')
+              setCharClass(' ')
               return
             }
             setCharClass(cls)
@@ -91,7 +92,7 @@ export function TavernCreatorModal({ isOpen, onClose }: TavernCreatorModalProps)
           <option value="__custom__">Custom...</option>
         </select>
         {charClass !== '' && !CLASS_NAMES.includes(charClass) && (
-          <input placeholder="Custom Class" value={charClass} onChange={(e) => setCharClass(e.target.value)} />
+          <input placeholder="Custom Class" value={charClass.trim()} onChange={(e) => setCharClass(e.target.value)} autoFocus />
         )}
 
         <div style={{ display: 'flex', gap: '8px' }}>

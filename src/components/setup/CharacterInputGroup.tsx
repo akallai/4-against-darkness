@@ -40,11 +40,11 @@ export function CharacterInputGroup({ index, character }: CharacterInputGroupPro
           onChange={(e) => update({ name: e.target.value })}
         />
         <select
-          value={character.class}
+          value={CLASS_NAMES.includes(character.class) ? character.class : character.class === '' ? '' : '__custom__'}
           onChange={(e) => {
             const cls = e.target.value
             if (cls === '__custom__') {
-              update({ class: '' })
+              update({ class: ' ' })
               return
             }
             const template = applyClassTemplate(cls)
@@ -66,8 +66,9 @@ export function CharacterInputGroup({ index, character }: CharacterInputGroupPro
           <input
             type="text"
             placeholder="Custom Class"
-            value={character.class}
+            value={character.class.trim()}
             onChange={(e) => update({ class: e.target.value })}
+            autoFocus
           />
         )}
       </div>
