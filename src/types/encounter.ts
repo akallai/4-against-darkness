@@ -1,4 +1,6 @@
-export type EncounterCategory = 'minion' | 'boss' | 'weird'
+export type EncounterCategory = 'minion' | 'boss' | 'weird' | 'vermin'
+
+export type BestiaryEnvironment = 'dungeon' | 'caverns' | 'fungal_grottoes' | 'fiendish_foes' | 'custom'
 
 export interface Encounter {
   id: number
@@ -29,4 +31,7 @@ export interface BestiaryEntry {
   attacks: string
   abilities: string
   notes: string
+  environment: BestiaryEnvironment
+  count: string
+  isDefault?: boolean
 }

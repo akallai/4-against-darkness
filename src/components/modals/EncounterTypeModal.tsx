@@ -19,11 +19,18 @@ export function EncounterTypeModal({ isOpen, onClose }: EncounterTypeModalProps)
     <Modal isOpen={isOpen} onClose={onClose} title="New Encounter">
       <p className="enc-type-prompt">What lurks in the darkness?</p>
       <div className="enc-type-grid">
+        <button className="enc-type-option" onClick={() => selectType('vermin')}>
+          <span className="enc-type-icon">&#128027;</span>
+          <div className="enc-type-info">
+            <div className="enc-type-name">Vermin</div>
+            <div className="enc-type-desc">Rats, bats, insects and crawling things</div>
+          </div>
+        </button>
         <button className="enc-type-option" onClick={() => selectType('minion')}>
           <span className="enc-type-icon">&#9876;</span>
           <div className="enc-type-info">
-            <div className="enc-type-name">Minion / Vermin</div>
-            <div className="enc-type-desc">Common foes, mooks, and crawling things</div>
+            <div className="enc-type-name">Minion</div>
+            <div className="enc-type-desc">Goblins, skeletons, orcs and other common foes</div>
           </div>
         </button>
         <button className="enc-type-option" onClick={() => selectType('boss')}>

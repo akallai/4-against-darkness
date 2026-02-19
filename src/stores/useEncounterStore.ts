@@ -81,7 +81,7 @@ export const useEncounterStore = create<EncounterState>()((set) => ({
         }
         // Auto-complete when all enemies are defeated
         if (newStatus.every(Boolean) && !e.isCompleted) {
-          const stat = e.category === 'minion' ? 'mv' : 'bw'
+          const stat = e.category === 'minion' || e.category === 'vermin' ? 'mv' : 'bw'
           usePartyStore.getState().incrementStat(stat)
           return { ...e, status: newStatus, isCompleted: true, outcome: 'victory' }
         }

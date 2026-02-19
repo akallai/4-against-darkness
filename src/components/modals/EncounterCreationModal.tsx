@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Modal } from '@/components/common/Modal'
 import { useEncounterStore } from '@/stores/useEncounterStore'
+import { usePartyStore } from '@/stores/usePartyStore'
 import { useUIStore } from '@/stores/useUIStore'
-import type { EncounterCategory } from '@/types'
+import { defaultBestiary } from '@/data/defaultBestiary'
+import type { DefaultBestiaryEntry } from '@/data/defaultBestiary'
+import { getHCL, getTier, resolveExpression, rollCountFormula } from '@/utils/hclTier'
+import type { EncounterCategory, BestiaryEnvironment } from '@/types'
 import './EncounterModals.css'
 
 interface EncounterCreationModalProps {
@@ -10,10 +14,18 @@ interface EncounterCreationModalProps {
   onClose: () => void
 }
 
+const ENV_GROUP_LABELS: Record<Exclude<BestiaryEnvironment, 'custom'>, string> = {
+  dungeon: 'Dungeon',
+  caverns: 'Caverns',
+  fungal_grottoes: 'Fungal Grottoes',
+  fiendish_foes: 'Fiendish Foes',
+}
+
 export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationModalProps) {
   const addEncounter = useEncounterStore((s) => s.addEncounter)
   const bestiary = useEncounterStore((s) => s.bestiary)
   const closeModal = useUIStore((s) => s.closeModal)
+  const characters = usePartyStore((s) => s.characters)
 
   const [type, setType] = useState('')
   const [count, setCount] = useState(1)
@@ -33,18 +45,50 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
     }
   }, [isOpen])
 
-  const loadFromBestiary = (index: string) => {
-    setSelectedBestiary(index)
-    const entry = bestiary[parseInt(index)]
-    if (!entry) return
-    setType(entry.type)
-    setLife(entry.life)
-    setLvl(entry.lvl)
-    setMorale(entry.morale)
-    setAttacks(entry.attacks)
-    setTreasure(entry.treasure)
-    setAbilities(entry.abilities)
-    setCategory(entry.category)
+  const loadFromBestiary = (compositeKey: string) => {
+    setSelectedBestiary(compositeKey)
+    if (!compositeKey) return
+
+    const hcl = getHCL(characters)
+    const tier = getTier(hcl)
+
+    if (compositeKey.startsWith('default-')) {
+      const index = parseInt(compositeKey.slice('default-'.length), 10)
+      const entry: DefaultBestiaryEntry | undefined = defaultBestiary[index]
+      if (!entry) return
+
+      setType(entry.type)
+      setCategory(entry.category)
+      setMorale(entry.morale)
+      setAttacks(entry.attacks)
+      setTreasure(entry.treasure)
+      setAbilities(entry.abilities)
+
+      // Resolve lvl with maxLvl cap
+      const resolvedLvl = resolveExpression(entry.lvl, hcl, tier, entry.maxLvl)
+      setLvl(String(resolvedLvl))
+
+      // Resolve life with maxLife cap
+      const resolvedLife = resolveExpression(entry.life, hcl, tier, entry.maxLife)
+      setLife(String(resolvedLife))
+
+      // Roll count formula
+      const rolledCount = rollCountFormula(entry.count)
+      setCount(rolledCount)
+    } else if (compositeKey.startsWith('custom-')) {
+      const index = parseInt(compositeKey.slice('custom-'.length), 10)
+      const entry = bestiary[index]
+      if (!entry) return
+
+      setType(entry.type)
+      setLife(entry.life)
+      setLvl(entry.lvl)
+      setMorale(entry.morale)
+      setAttacks(entry.attacks)
+      setTreasure(entry.treasure)
+      setAbilities(entry.abilities)
+      setCategory(entry.category)
+    }
   }
 
   const handleCreate = () => {
@@ -64,16 +108,44 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
     closeModal()
   }
 
+  // Group default entries by environment
+  const envGroups = (Object.keys(ENV_GROUP_LABELS) as Exclude<BestiaryEnvironment, 'custom'>[]).map((env) => ({
+    env,
+    label: ENV_GROUP_LABELS[env],
+    entries: defaultBestiary
+      .map((entry, index) => ({ entry, index }))
+      .filter(({ entry }) => entry.environment === env),
+  }))
+
+  const hasAnyEntries = defaultBestiary.length > 0 || bestiary.length > 0
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create Encounter">
-      {bestiary.length > 0 && (
+      {hasAnyEntries && (
         <div className="enc-create-bestiary">
           <label>From Bestiary</label>
           <select value={selectedBestiary} onChange={(e) => loadFromBestiary(e.target.value)}>
             <option value="">-- Select creature --</option>
-            {bestiary.map((b, i) => (
-              <option key={i} value={i}>{b.type} ({b.category})</option>
-            ))}
+            {envGroups.map(({ env, label, entries }) =>
+              entries.length > 0 ? (
+                <optgroup key={env} label={label}>
+                  {entries.map(({ entry, index }) => (
+                    <option key={`default-${index}`} value={`default-${index}`}>
+                      {entry.type} ({entry.category})
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null,
+            )}
+            {bestiary.length > 0 && (
+              <optgroup label="Custom">
+                {bestiary.map((b, i) => (
+                  <option key={`custom-${i}`} value={`custom-${i}`}>
+                    {b.type} ({b.category})
+                  </option>
+                ))}
+              </optgroup>
+            )}
           </select>
         </div>
       )}

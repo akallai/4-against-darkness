@@ -22,18 +22,18 @@ export function EncounterCard({ encounter }: EncounterCardProps) {
 
   const handleComplete = (outcome: string) => {
     completeEncounter(encounter.id, outcome)
-    const stat = encounter.category === 'minion' ? 'mv' : 'bw'
+    const stat = encounter.category === 'minion' || encounter.category === 'vermin' ? 'mv' : 'bw'
     incrementStat(stat)
   }
 
   const handleReopen = () => {
-    const stat = encounter.category === 'minion' ? 'mv' : 'bw'
+    const stat = encounter.category === 'minion' || encounter.category === 'vermin' ? 'mv' : 'bw'
     incrementStat(stat, -1)
     updateEncounter(encounter.id, { isCompleted: false, outcome: '' })
   }
 
   const categoryLabel =
-    encounter.category === 'minion' ? 'Minion' : encounter.category === 'boss' ? 'Boss' : 'Weird'
+    encounter.category === 'minion' ? 'Minion' : encounter.category === 'boss' ? 'Boss' : encounter.category === 'vermin' ? 'Vermin' : 'Weird'
 
   return (
     <div className={`encounter-card ${encounter.isCompleted ? 'completed' : ''}`}>

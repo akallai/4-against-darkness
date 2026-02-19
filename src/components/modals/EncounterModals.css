@@ -198,3 +198,117 @@
   padding: 11px;
   font-size: 0.95em;
 }
+
+/* ============================================================
+   Bestiary Manager Modal
+   ============================================================ */
+
+.bestiary-filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.bestiary-filters select {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 0.8em;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+}
+
+.bestiary-section-header {
+  font-size: 0.7em;
+  color: var(--global-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 8px 0 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.bestiary-entry {
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.bestiary-entry:hover {
+  background: rgba(212, 175, 55, 0.06);
+}
+
+.bestiary-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bestiary-entry-name {
+  font-weight: bold;
+  font-size: 0.85em;
+  flex: 1;
+  min-width: 0;
+}
+
+.bestiary-entry-tag {
+  font-size: 0.65em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #aaa;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.bestiary-entry-stats {
+  font-size: 0.7em;
+  color: #888;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.bestiary-entry-details {
+  margin-top: 6px;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  font-size: 0.75em;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.bestiary-entry-details div {
+  margin-bottom: 2px;
+}
+
+.bestiary-entry-details strong {
+  color: #ccc;
+}
+
+.bestiary-custom-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bestiary-custom-info {
+  font-size: 0.85em;
+}
+
+.bestiary-custom-meta {
+  font-size: 0.7em;
+  color: #888;
+  margin-left: 8px;
+}
+
+.bestiary-add-section {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 8px;
+}

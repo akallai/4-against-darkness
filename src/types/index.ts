@@ -4,7 +4,7 @@ export { createEmptyCharacter } from './character'
 export type { JournalEntry, NPC, NPCLocation, JournalData } from './journal'
 export { createEmptyJournalData } from './journal'
 
-export type { Encounter, BestiaryEntry, EncounterCategory } from './encounter'
+export type { Encounter, BestiaryEntry, EncounterCategory, BestiaryEnvironment } from './encounter'
 
 export type { Retainer, Professional, AnimalCompanion, Mount, FollowersData } from './follower'
 export { createEmptyAnimal, createEmptyMount, createEmptyFollowersData } from './follower'

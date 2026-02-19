@@ -135,6 +135,8 @@ describe('useEncounterStore', () => {
       attacks: '1',
       abilities: '',
       notes: '',
+      environment: 'custom' as const,
+      count: '1',
     }
     useEncounterStore.getState().addBestiaryEntry(entry)
     expect(useEncounterStore.getState().bestiary).toHaveLength(1)
