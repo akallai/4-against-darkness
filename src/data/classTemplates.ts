@@ -6,11 +6,6 @@ export interface DiceExpression {
   bonus?: number
 }
 
-export interface TraitOption {
-  val: string
-  det: string
-}
-
 export interface ClassTemplate {
   name: string
   hpBase: number
@@ -20,11 +15,10 @@ export interface ClassTemplate {
   startingGear: ListItem[]
   spells: ListItem[]
   abilities: ListItem[]
-  traits: TraitOption[]
+  traits: ListItem[]
   traitCount: number
   startingRationsDice?: DiceExpression
   lantern?: boolean
-  notes?: string
 }
 
 export const CLASS_TEMPLATES: ClassTemplate[] = [
@@ -615,6 +609,7 @@ export const CLASS_TEMPLATES: ClassTemplate[] = [
       { val: 'Heavy armor + shield', det: '' },
       { val: 'Any weapons except firearms', det: '' },
       { val: 'Magic items as Warrior', det: '' },
+      { val: 'Saves as Warrior', det: '' },
       { val: 'Stealth: no bonus', det: '' },
     ],
     traits: [
