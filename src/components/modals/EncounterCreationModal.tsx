@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Modal } from '@/components/common/Modal'
 import { useEncounterStore } from '@/stores/useEncounterStore'
 import { usePartyStore } from '@/stores/usePartyStore'
@@ -6,19 +6,12 @@ import { useUIStore } from '@/stores/useUIStore'
 import { defaultBestiary } from '@/data/defaultBestiary'
 import type { DefaultBestiaryEntry } from '@/data/defaultBestiary'
 import { getHCL, getTier, resolveExpression, rollCountFormula } from '@/utils/hclTier'
-import type { EncounterCategory, BestiaryEnvironment } from '@/types'
+import type { EncounterCategory } from '@/types'
 import './EncounterModals.css'
 
 interface EncounterCreationModalProps {
   isOpen: boolean
   onClose: () => void
-}
-
-const ENV_GROUP_LABELS: Record<Exclude<BestiaryEnvironment, 'custom'>, string> = {
-  dungeon: 'Dungeon',
-  caverns: 'Caverns',
-  fungal_grottoes: 'Fungal Grottoes',
-  fiendish_foes: 'Fiendish Foes',
 }
 
 export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationModalProps) {
@@ -36,17 +29,35 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
   const [treasure, setTreasure] = useState('')
   const [abilities, setAbilities] = useState('')
   const [category, setCategory] = useState<EncounterCategory>('minion')
-  const [selectedBestiary, setSelectedBestiary] = useState('')
+  const [bestiarySearch, setBestiarySearch] = useState('')
+  const [showBestiaryResults, setShowBestiaryResults] = useState(false)
+  const [selectedLabel, setSelectedLabel] = useState('')
 
-  useEffect(() => {
-    if (isOpen) {
-      const cat = sessionStorage.getItem('4AD_pending_enc_category') as EncounterCategory | null
-      if (cat) setCategory(cat)
-    }
-  }, [isOpen])
+  const allEntries = useMemo(() => {
+    const defaults = defaultBestiary.map((entry, index) => ({
+      key: `default-${index}`,
+      name: entry.type,
+      category: entry.category,
+      environment: entry.environment,
+      source: 'default' as const,
+    }))
+    const customs = bestiary.map((entry, index) => ({
+      key: `custom-${index}`,
+      name: entry.type,
+      category: entry.category,
+      environment: entry.environment,
+      source: 'custom' as const,
+    }))
+    return [...defaults, ...customs]
+  }, [bestiary])
+
+  const filteredBestiary = useMemo(() => {
+    if (!bestiarySearch) return []
+    const q = bestiarySearch.toLowerCase()
+    return allEntries.filter((e) => e.name.toLowerCase().includes(q)).slice(0, 20)
+  }, [bestiarySearch, allEntries])
 
   const loadFromBestiary = (compositeKey: string) => {
-    setSelectedBestiary(compositeKey)
     if (!compositeKey) return
 
     const hcl = getHCL(characters)
@@ -64,17 +75,15 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
       setTreasure(entry.treasure)
       setAbilities(entry.abilities)
 
-      // Resolve lvl with maxLvl cap
       const resolvedLvl = resolveExpression(entry.lvl, hcl, tier, entry.maxLvl)
       setLvl(String(resolvedLvl))
 
-      // Resolve life with maxLife cap
       const resolvedLife = resolveExpression(entry.life, hcl, tier, entry.maxLife)
       setLife(String(resolvedLife))
 
-      // Roll count formula
       const rolledCount = rollCountFormula(entry.count)
       setCount(rolledCount)
+      setSelectedLabel(entry.type)
     } else if (compositeKey.startsWith('custom-')) {
       const index = parseInt(compositeKey.slice('custom-'.length), 10)
       const entry = bestiary[index]
@@ -88,8 +97,42 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
       setTreasure(entry.treasure)
       setAbilities(entry.abilities)
       setCategory(entry.category)
+      setSelectedLabel(entry.type)
     }
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      // Reset search state
+      setBestiarySearch('')
+      setShowBestiaryResults(false)
+      setSelectedLabel('')
+
+      const cat = sessionStorage.getItem('4AD_pending_enc_category') as EncounterCategory | null
+      if (cat) {
+        setCategory(cat)
+        sessionStorage.removeItem('4AD_pending_enc_category')
+      }
+
+      const pendingKey = sessionStorage.getItem('4AD_pending_enc_bestiary_key')
+      if (pendingKey) {
+        sessionStorage.removeItem('4AD_pending_enc_bestiary_key')
+        sessionStorage.removeItem('4AD_pending_enc_environment')
+        loadFromBestiary(pendingKey)
+      } else {
+        // Reset form fields when no pending key
+        setType('')
+        setCount(1)
+        setLife('')
+        setLvl('')
+        setMorale('')
+        setAttacks('')
+        setTreasure('')
+        setAbilities('')
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen])
 
   const handleCreate = () => {
     if (!type.trim()) return
@@ -108,47 +151,52 @@ export function EncounterCreationModal({ isOpen, onClose }: EncounterCreationMod
     closeModal()
   }
 
-  // Group default entries by environment
-  const envGroups = (Object.keys(ENV_GROUP_LABELS) as Exclude<BestiaryEnvironment, 'custom'>[]).map((env) => ({
-    env,
-    label: ENV_GROUP_LABELS[env],
-    entries: defaultBestiary
-      .map((entry, index) => ({ entry, index }))
-      .filter(({ entry }) => entry.environment === env),
-  }))
-
-  const hasAnyEntries = defaultBestiary.length > 0 || bestiary.length > 0
+  const handleSearchSelect = (key: string) => {
+    loadFromBestiary(key)
+    setBestiarySearch('')
+    setShowBestiaryResults(false)
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create Encounter">
-      {hasAnyEntries && (
-        <div className="enc-create-bestiary">
-          <label>From Bestiary</label>
-          <select value={selectedBestiary} onChange={(e) => loadFromBestiary(e.target.value)}>
-            <option value="">-- Select creature --</option>
-            {envGroups.map(({ env, label, entries }) =>
-              entries.length > 0 ? (
-                <optgroup key={env} label={label}>
-                  {entries.map(({ entry, index }) => (
-                    <option key={`default-${index}`} value={`default-${index}`}>
-                      {entry.type} ({entry.category})
-                    </option>
-                  ))}
-                </optgroup>
-              ) : null,
-            )}
-            {bestiary.length > 0 && (
-              <optgroup label="Custom">
-                {bestiary.map((b, i) => (
-                  <option key={`custom-${i}`} value={`custom-${i}`}>
-                    {b.type} ({b.category})
-                  </option>
-                ))}
-              </optgroup>
-            )}
-          </select>
+      <div className="enc-create-bestiary">
+        <label>From Bestiary</label>
+        <div className="enc-search-container enc-search-inline">
+          <input
+            className="enc-search-input"
+            placeholder={selectedLabel || 'Search creatures...'}
+            value={bestiarySearch}
+            onChange={(e) => {
+              setBestiarySearch(e.target.value)
+              setShowBestiaryResults(true)
+            }}
+            onFocus={() => {
+              if (bestiarySearch) setShowBestiaryResults(true)
+            }}
+          />
+          {showBestiaryResults && bestiarySearch && (
+            <div className="enc-search-results">
+              {filteredBestiary.length === 0 ? (
+                <div className="enc-search-empty">No matches</div>
+              ) : (
+                filteredBestiary.map((entry) => (
+                  <button
+                    key={entry.key}
+                    className="enc-search-row"
+                    onClick={() => handleSearchSelect(entry.key)}
+                  >
+                    <span className="enc-search-row-name">{entry.name}</span>
+                    <span className="enc-search-row-meta">
+                      {entry.category}
+                      {entry.source === 'custom' ? ' \u00b7 custom' : ` \u00b7 ${entry.environment.replace('_', ' ')}`}
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="enc-create-form">
         <input

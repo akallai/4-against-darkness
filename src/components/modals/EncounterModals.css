@@ -2,17 +2,50 @@
    Encounter Type Selection Modal
    ============================================================ */
 
-.enc-type-prompt {
-  font-size: 0.85em;
-  color: #999;
+/* Environment pill selector */
+
+.enc-env-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-bottom: 12px;
-  text-align: center;
+  justify-content: center;
 }
+
+.enc-env-pill {
+  padding: 4px 12px;
+  font-size: 0.75em;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  color: #aaa;
+  cursor: pointer;
+  font-family: var(--font-stack);
+  transition: all 0.2s;
+}
+
+.enc-env-pill:hover {
+  border-color: var(--global-accent);
+  color: var(--global-accent);
+}
+
+.enc-env-pill.active {
+  background: var(--global-accent);
+  border-color: var(--global-accent);
+  color: #1a1a2e;
+  font-weight: bold;
+}
+
+/* Category cards */
 
 .enc-type-grid {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.enc-type-option-wrap {
+  position: relative;
 }
 
 .enc-type-option {
@@ -23,6 +56,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 12px 14px;
+  padding-right: 48px;
   cursor: pointer;
   transition: all 0.2s;
   color: var(--text-color);
@@ -34,6 +68,31 @@
 .enc-type-option:hover {
   border-color: var(--global-accent);
   background: rgba(212, 175, 55, 0.08);
+}
+
+.enc-type-random-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 1;
+}
+
+.enc-type-random-btn:hover {
+  border-color: var(--global-accent);
+  background: rgba(212, 175, 55, 0.15);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .enc-type-icon {
@@ -61,6 +120,139 @@
   line-height: 1.3;
 }
 
+/* Divider */
+
+.enc-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 14px 0 10px;
+  font-size: 0.7em;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.enc-divider::before,
+.enc-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Search container (shared by hub and creation modal) */
+
+.enc-search-container {
+  position: relative;
+}
+
+.enc-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.85em;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  transition: border-color 0.2s;
+}
+
+.enc-search-input::placeholder {
+  color: #666;
+}
+
+.enc-search-input:focus {
+  outline: none;
+  border-color: var(--global-accent);
+}
+
+.enc-search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--card-bg, #1e1e30);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  z-index: 10;
+}
+
+.enc-search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: none;
+  color: var(--text-color);
+  font-family: var(--font-stack);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.enc-search-row:hover {
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.enc-search-row:last-child {
+  border-bottom: none;
+}
+
+.enc-search-row-name {
+  font-size: 0.85em;
+  font-weight: bold;
+}
+
+.enc-search-row-meta {
+  font-size: 0.65em;
+  color: #888;
+  text-transform: capitalize;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+.enc-search-empty {
+  padding: 12px;
+  text-align: center;
+  font-size: 0.8em;
+  color: #666;
+}
+
+.enc-search-inline {
+  margin-bottom: 0;
+}
+
+/* Enter manually link */
+
+.enc-manual-link {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 0.8em;
+  font-family: var(--font-stack);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+
+.enc-manual-link:hover {
+  color: var(--global-accent);
+}
+
 /* ============================================================
    Encounter Creation Modal
    ============================================================ */
@@ -80,16 +272,6 @@
   margin-bottom: 4px;
 }
 
-.enc-create-bestiary select {
-  width: 100%;
-  padding: 6px 8px;
-  font-size: 0.85em;
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text-color);
-  font-family: var(--font-stack);
-}
 
 .enc-create-form {
   display: flex;
