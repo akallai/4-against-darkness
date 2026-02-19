@@ -1,0 +1,818 @@
+import type { ListItem } from '@/types'
+
+export interface DiceExpression {
+  count: number
+  sides: number
+  bonus?: number
+}
+
+export interface TraitOption {
+  val: string
+  det: string
+}
+
+export interface ClassTemplate {
+  name: string
+  hpBase: number
+  atk: string
+  def: string
+  startingGold: DiceExpression
+  startingGear: ListItem[]
+  spells: ListItem[]
+  abilities: ListItem[]
+  traits: TraitOption[]
+  traitCount: number
+  startingRationsDice?: DiceExpression
+  lantern?: boolean
+  notes?: string
+}
+
+export const CLASS_TEMPLATES: ClassTemplate[] = [
+  // ── Acrobat ──
+  {
+    name: 'Acrobat',
+    hpBase: 3,
+    atk: '+1/2L',
+    def: '+L',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Light weapon (knife or club)', det: '' },
+      { val: 'Rope', det: '' },
+      { val: 'Loose clothes', det: '' },
+    ],
+    spells: [
+      { val: 'Leap out of Harm', det: '1 trick pt. Reroll failed Save vs non-magical danger. Not vs spells/gas/poison/gaze.' },
+      { val: 'Shift Position', det: '1 trick pt. Trade places in Marching Order with ally.' },
+      { val: 'Distract', det: '1 trick pt. Reduce Foe L by Tier for encounter. Not vs Weird Monsters/Vermin. Not cumulative.' },
+      { val: 'Flip Kick', det: '1 trick pt. Unarmed ATK ignoring -2 mod. Roll 1 = skip next turn.' },
+      { val: 'Double Kick', det: '1 trick pt. Unarmed ATK at -1 vs TWO Minor Foes (max 1 kill each). Roll 1 = skip turn.' },
+      { val: 'Evade', det: '1 trick pt. Move out of melee without suffering any ATK.' },
+      { val: 'Graceful Move', det: '1 trick pt. Reroll failed Save to woo/seduce/impress NPC.' },
+      { val: 'Serpent Twist', det: '1 trick pt. Auto-escape bonds, tendrils, tentacles, ropes, man-catchers etc.' },
+      { val: 'Knife Throw', det: '1 trick pt. Throw light blade at +Tier ATK. Ignores -1 ranged light penalty.' },
+      { val: 'Acrobatic Performance', det: '1+ trick pts. Settlements only. d6gp per pt spent (Save vs L6). Roll 1 = fined same amount or lose Tier Life.' },
+      { val: 'Vaulting Strike', det: '1 trick pt. 1x/combat, 1st turn, not surprised. +L ATK. Roll 1 = -2 DEF & Foes must target you.' },
+      { val: 'Juggling', det: '1 trick pt. Extra free hand for encounter duration.' },
+    ],
+    abilities: [
+      { val: 'Trick Points', det: 'L+3 pts/adventure. Recover Tier pts when resting (+1 Life).' },
+      { val: 'Stealth +L', det: '' },
+      { val: '+L swim/climb/fall Saves', det: 'Always add +L to swimming, climbing, and Saves vs falling damage.' },
+      { val: '+1/2L Trap Saves', det: '' },
+      { val: 'No armor', det: '' },
+      { val: 'Light weapons only', det: 'Light weapons, light ranged weapons.' },
+      { val: 'Saves as Rogue', det: '' },
+      { val: 'Magic use as Rogue', det: '' },
+    ],
+    traits: [
+      { val: 'Graceful Dodge', det: '1x/combat, reduce physical ATK dmg by 1 (can reach 0).' },
+      { val: 'Quick Climber', det: '+Tier on Climbing Saves.' },
+      { val: 'Master of Evasion', det: 'Use Evade without spending trick pts.' },
+      { val: 'Distracting Feint', det: '1x/combat, prevent Foe next ATK (single ATK if multi). Must be in melee, not rearguard in corridor.' },
+      { val: 'Distract (Trait)', det: '1x/combat, reduce Foe L by 1 for 1 turn. Must be in melee, not rearguard in corridor.' },
+      { val: 'Quick Draw Talent', det: 'Draw/swap weapons in same turn and still ATK. Still 1 ATK/turn.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Assassin ──
+  {
+    name: 'Assassin',
+    hpBase: 3,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 5, sides: 6 },
+    startingGear: [
+      { val: 'Two weapons (any)', det: '' },
+      { val: 'Light armor', det: '' },
+      { val: 'Lockpicks', det: '' },
+    ],
+    spells: [
+      { val: 'Hide in Shadows', det: '1 turn to hide + mark target. Stealth Save +L vs Foe L. Fail = free Foe ATK. Success = next hit is triple dmg. Not vs undead/artificial/jellies/oozes/spirits (L4 + 1 XP to bypass). Only 1 assassin hides at a time.' },
+    ],
+    abilities: [
+      { val: '+L ATK', det: 'All melee and ranged weapons, including firearms.' },
+      { val: '+L disguise Saves', det: '' },
+      { val: 'Find/disarm Traps & pick locks', det: 'No +L bonus to these rolls.' },
+      { val: 'Saves as Rogue', det: '' },
+      { val: 'Light armor only', det: '' },
+      { val: 'Rogue item use', det: 'Can use items reserved for rogues (lockpicks, poison, athames).' },
+    ],
+    traits: [
+      { val: 'Deadly Precision', det: '1x/adv, +2 dmg vs unaware Foe (Stealth Save vs Foe L). Cannot combine with Hide in Shadows.' },
+      { val: 'Poison Expert', det: '+1 Saves vs poison crafting/handling/resisting.' },
+      { val: 'Silent Step', det: '+Tier Stealth Saves.' },
+      { val: 'Lethal Dodge', det: 'On Explosion DEF roll, free melee ATK vs that Foe (in Foe\'s turn).' },
+      { val: 'Quick Escape', det: '1x/L/adv, disengage without receiving ATK.' },
+      { val: 'Deception', det: '+L social Saves when bluffing/lying/impersonating. +Tier if assassin already gets +L.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Barbarian ──
+  {
+    name: 'Barbarian',
+    hpBase: 7,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Light armor', det: '' },
+      { val: 'Shield', det: '' },
+      { val: 'Hand weapon', det: 'May trade shield+hand weapon for 2H weapon, or bow+light weapon.' },
+    ],
+    spells: [
+      { val: 'Rage', det: '1+1 per 2 full L (2 at L2, 3 at L4). Roll 3d6 pick best. If hit, double dmg.' },
+    ],
+    abilities: [
+      { val: '+L ATK', det: 'Melee and ranged.' },
+      { val: 'No Magic', det: 'No magic items/scrolls/potions. May use herbal remedies, resting, bandages, holy water. Accepts cleric healing.' },
+      { val: 'Illiterate', det: 'Cannot read. No benefit from books/written material/inscriptions for Clues.' },
+      { val: 'Stealth +1/2L', det: '' },
+      { val: 'Light armor + shield', det: '' },
+      { val: 'Any weapons except firearms', det: '' },
+      { val: 'Saves as Barbarian', det: '' },
+    ],
+    traits: [
+      { val: 'Beast Slayer', det: '+1 ATK vs Weird Monsters.' },
+      { val: 'Berserk Fighting', det: '1x/adv, +1 extra dmg all ATKs for entire combat. Then -1 ATK for 6 rooms/60min or until Rest.' },
+      { val: 'Herbal Knowledge', det: '1x/adv, auto-find herbs to heal d3 Life. Not in settings without vegetation.' },
+      { val: 'Survival Instinct', det: '+1 to find food/avoid getting lost. OR 1x/adv avoid 1 Wandering Monster or 1 Trap (before playing it).' },
+      { val: 'Tough Skinned', det: '1x/combat, reduce single ATK dmg by 1 (can reach 0).' },
+      { val: 'Literate', det: 'Can read (unusual). Still cannot cast from scrolls. May gain Clues from texts.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Bulwark ──
+  {
+    name: 'Bulwark',
+    hpBase: 7,
+    atk: '+1/2L',
+    def: '+1/2L',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Heavy armor', det: '' },
+      { val: 'Shield', det: '' },
+      { val: 'Hand weapon', det: '' },
+    ],
+    spells: [],
+    abilities: [
+      { val: '+1/2L ATK melee + DEF', det: '' },
+      { val: '+Tier ATK ranged', det: '' },
+      { val: 'Rare', det: 'Max 1 bulwark per party.' },
+      { val: 'Limited Healing', det: 'May use bandages. Other healing (prayers/spells/potions) ONLY if no other PC is wounded. At 1 Life, may prioritize.' },
+      { val: 'Heavy armor + shield', det: '' },
+      { val: 'Any weapons except firearms', det: '' },
+      { val: 'Magic use as Warrior', det: 'Cast scrolls as L1 wizard.' },
+      { val: 'Saves as Warrior', det: '' },
+      { val: 'Stealth: no bonus', det: '' },
+    ],
+    traits: [
+      { val: 'Shieldwall', det: '1x/adv, if adjacent ally has shield, both +1 DEF melee for encounter. Lost if either incapacitated.' },
+      { val: 'Guardian Stance', det: 'If adjacent ally ATK\'d, take hit instead (before DEF roll). DEF roll vs original ATK L.' },
+      { val: 'Iron Will', det: 'Reroll failed Saves vs Madness/fear/charm/illusion/mind control. Ignore 1st Madness point per adventure.' },
+      { val: 'Shield Bash', det: '1x/combat, after successful DEF, ATK with shield at +L in Foe\'s turn. Needs shield.' },
+      { val: 'Brace for Impact', det: '1x/combat, reduce single ATK dmg by 1 (can reach 0).' },
+      { val: 'Stubborn Endurance', det: '1x/adv, if blow reduces to 1 or 0 Life, remain at 2 Life. Not if below 0.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Cleric ──
+  {
+    name: 'Cleric',
+    hpBase: 4,
+    atk: '+1/2L',
+    def: '+0',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Light armor', det: '' },
+      { val: 'Shield', det: '' },
+      { val: 'Hand weapon', det: 'May trade shield+hand weapon for 2H weapon.' },
+    ],
+    spells: [
+      { val: 'Healing', det: '3x/adv. Heal d6+L Life on ally or self. 1 turn to cast. No free hand needed.' },
+      { val: 'Blessing', det: '3x/adv. Remove curse or condition (e.g. turned to stone). Auto-success. No free hand needed.' },
+    ],
+    abilities: [
+      { val: '+1/2L ATK', det: 'Melee and ranged.' },
+      { val: '+L ATK vs undead', det: '' },
+      { val: 'Stealth +1/2L', det: '' },
+      { val: 'Heavy armor + shield', det: '' },
+      { val: 'Light/2H/hand weapon, sling', det: '' },
+      { val: 'Magic use', det: 'Any item not explicitly forbidden to clerics.' },
+      { val: 'Saves as Cleric', det: '' },
+    ],
+    traits: [
+      { val: 'Blessed Touch', det: '1x/adv, heal Tier Life without using Healing prayer. 1 turn. All pts on single PC/NPC you can touch.' },
+      { val: 'Sacred Defense', det: '+1 DEF vs all Demon and Undead Foes.' },
+      { val: 'Divine Protection', det: '1x/adv, +1 DEF and Saves for single combat duration.' },
+      { val: 'Holy Resilience', det: '+1 extra Life at creation. At L10, +1 more.' },
+      { val: 'Chant of Valor', det: '1x/adv, +1 ATK all allies (incl hirelings/animals) for 1 turn. Free action.' },
+      { val: 'Strength of Spirit', det: '1x/adv, if reduced to 0 Life or below, remain at 1 Life.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Dwarf ──
+  {
+    name: 'Dwarf',
+    hpBase: 5,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 3, sides: 6 },
+    startingGear: [
+      { val: 'Light armor', det: '' },
+      { val: 'Shield', det: '' },
+      { val: 'Hand weapon', det: 'May trade shield+hand weapon for 2H weapon + heavy armor.' },
+    ],
+    spells: [
+      { val: 'Gold Sense', det: 'When meeting Foe, Save vs L6 (+L). If success, roll Foe Treasure before deciding action.' },
+    ],
+    abilities: [
+      { val: '+L ATK melee only', det: 'No ranged bonus.' },
+      { val: '+1 DEF vs giants/ogres/trolls', det: '' },
+      { val: '+1 ATK vs goblins', det: 'Melee and ranged.' },
+      { val: 'Miser', det: 'Party with 2+ dwarves may not Bribe Foes.' },
+      { val: 'Greedy', det: 'When party finds gold loot, each dwarf must get at least 1gp.' },
+      { val: 'Jewelry Merchant', det: '+20% resale value on gems/crystals/jewelry (rounded down). Also for Bribes.' },
+      { val: 'Stealth +1/2L', det: '' },
+      { val: 'Heavy armor + shield', det: '' },
+      { val: 'Any weapons incl firearms', det: '' },
+      { val: 'Magic use', det: 'Any item not forbidden to dwarves.' },
+      { val: 'Saves as Dwarf', det: '' },
+    ],
+    traits: [
+      { val: 'Axe Mastery', det: '+1 ATK melee with axe. May throw axe as ranged slashing at +L. Recovered after combat. Mundane axe roll 1 = lost.' },
+      { val: 'Underground Explorer', det: '+1 Search rolls in dungeons/caverns.' },
+      { val: 'Gold Nose', det: '1x/adv, when finding random gp/gem value, find maximum amount.' },
+      { val: 'Stubborn Resolve', det: '1x/adv, reroll failed Save vs poison/magic, OR reroll failed DEF, OR avoid 1 Madness.' },
+      { val: 'Gem Appraiser', det: '+30% (not 20%) resale on gems/jewels/Bribes (rounded up).' },
+      { val: 'Tough as Stone', det: 'Reduce dmg by 1 from first physical ATK in every combat (can reach 0).' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Druid ──
+  {
+    name: 'Druid',
+    hpBase: 3,
+    atk: '+1/2L',
+    def: '+0',
+    startingGold: { count: 2, sides: 6 },
+    startingGear: [
+      { val: 'Light weapon', det: 'Staff, sickle, club, or dagger.' },
+    ],
+    spells: [
+      { val: 'Disperse Vermin', det: 'Melee ATK vs Vermin at +2xL. Not vs undead/mechanical/animated. Foes dispersed (no loot/harvest).' },
+      { val: 'Summon Beast', det: 'Summon large animal. Fights as L3 warrior, 5 Life, 1 ATK/turn, 1 dmg. Disappears end of encounter/when slain/druid KO.' },
+      { val: 'Water Jet', det: 'Spellcasting vs Foe L. Hit: 2 dmg to fire creature, OR disperse 2 Vermin, OR KO 1 Minion, OR party flees free. +1 near water, -2 desert.' },
+      { val: 'Bear Form', det: '1 action to transform. Fight as warrior of druid L (min L3), 8 Life or current (better). No spells in form. Half dmg (round down) transfers back.' },
+      { val: 'Warp Wood', det: 'Destroy wooden door/chest/object. Auto 2 dmg to wood golem/treeman/dryad/wood elemental/plant Foe.' },
+      { val: 'Barkskin', det: 'Self or ally: -2 agility Saves, +2 DEF until end of encounter, -2 DEF vs fire. On Foe: +1L but fire ATKs at +3 & min 2 dmg.' },
+      { val: 'Lightning Strike', det: 'As wizard Lightning but outdoors only. Spellcasting roll vs L. 2 dmg to Major Foe, slay 1 Minor.' },
+      { val: 'Spiderweb', det: 'Auto-entangle 1 Major or d6 Minor Foes. -1L ATK/DEF for encounter. Not vs fire/spiders/elementals. Fire spell burns web.' },
+      { val: 'Entangle', det: 'As Spiderweb but forest/swamp/jungle only. Fire creatures break free after 2 turns. Spiders CAN be affected.' },
+      { val: 'Subdual', det: 'Auto on all allies. Ignore -1 subdual ATK modifier for encounter.' },
+      { val: 'Forest Pathway', det: 'Walk through woodland ignoring vegetation for 10min x L. Druid must be pos 1-2 in Marching Order.' },
+      { val: 'Alter Weather', det: 'Outdoors only. 10 min: -1L all ranged ATKs, +1 Lightning Strike. OR 2 dmg to fire/air elemental, OR douse fire/stop storm.' },
+    ],
+    abilities: [
+      { val: 'Spell Slots: 2+L', det: 'Cast druid spells at +L. Non-druid spells from scrolls/items at +1/2L (min +1). Cannot learn non-druid spells.' },
+      { val: 'Animal Companion', det: '1 free animal companion (+mount). No cost, but 1gp food when it arrives. +1 Madness if it dies. Replaced in wilderness.' },
+      { val: '+1/2L ATK', det: 'Melee and ranged.' },
+      { val: 'Stealth +1/2L', det: '' },
+      { val: 'Light armor + leafsteel + shield', det: '' },
+      { val: 'Light weapons, javelins, short bow/sling', det: '' },
+      { val: 'Saves as Cleric', det: '' },
+    ],
+    traits: [
+      { val: 'Wildform', det: '1x/adv, shapeshift to small animal for 1 encounter/10min. +1/2L DEF, no ATK, auto-succeed evade/climb/sneak/escape.' },
+      { val: 'Beast Friend', det: 'Alter Reaction rolls of natural animals by 1. Animal tag only, not magical beasts.' },
+      { val: 'Verdant Blessing', det: '1x/adv, restore d3 Life (self or ally) in natural environment. Not desert/arctic/Netherworld/dungeons.' },
+      { val: 'Leafsteel Familiarity', det: '+1 DEF when wearing leafsteel armor.' },
+      { val: 'Nature\'s Bounty', det: '1x/adv, in wilderness/fungal grottoes: find 2 Food rations OR potion healing 1 Life (cumulative with bandages, not in combat).' },
+      { val: 'Rootbind', det: '1x/adv, entangle Foe (loses next turn). Not vs flying/incorporeal/shapeless Foes.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Elf ──
+  {
+    name: 'Elf',
+    hpBase: 4,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 2, sides: 6 },
+    startingGear: [
+      { val: 'Light armor', det: '' },
+      { val: 'Bow', det: '' },
+      { val: 'Hand weapon', det: '' },
+    ],
+    spells: [
+      { val: 'Escape', det: 'Auto-teleport to first tile. Cast instead of DEF roll or on your turn.' },
+      { val: 'Lightning', det: 'Spellcasting vs Foe L. 2 dmg to Major Foe, slay 1 Minor. No effect on electricity-immune.' },
+      { val: 'Fireball', det: 'Ranged ATK at +L. 1 dmg Major Foe. Minors: ATK roll - Foe L killed (min 1). No effect on fire dragons.' },
+      { val: 'Protection', det: 'Auto, +1 DEF on self or ally until end of encounter.' },
+      { val: 'Sleep', det: 'Spellcasting vs L. Target sleeps (subdue or slay). Not vs dragons/unliving/L11+. 1 Major or d6+L Minors.' },
+    ],
+    abilities: [
+      { val: 'Spell Slots: L', det: 'Cast basic wizard spells (except Blessing) at +L. Can learn others from scrolls (XP roll, scroll consumed). Choose spells before adventure.' },
+      { val: '+L ATK', det: 'Not with 2H melee weapons.' },
+      { val: '+1 ATK vs orcs', det: 'All Foes with orc/orcish/half-orc in name.' },
+      { val: '+L spellcasting', det: 'Also from scrolls and magic items.' },
+      { val: 'Casting restriction', det: 'Must wear Light/Leafsteel/Elven chainmail and NO shield to cast. Shield can be slung (1 turn to ready).' },
+      { val: 'Stealth +1', det: '' },
+      { val: 'Any armor + shield', det: '' },
+      { val: 'Any weapons except firearms', det: '' },
+      { val: 'Saves as Elf', det: '' },
+    ],
+    traits: [
+      { val: 'Bladesong', det: '1x/adv, +1 ATK with swords/spears/bows for entire encounter.' },
+      { val: 'Forest Born', det: '+1 forest navigation/Search. 1x/outdoor adv, prevent surprise from Wandering Monsters (encounter still happens, party acts first).' },
+      { val: 'Fey Grace', det: '1x/combat, reduce physical melee dmg by 1 (can reach 0). May disengage/flee without extra ATKs.' },
+      { val: 'Spellwoven', det: '1x/adv, cast spell without using spell slot.' },
+      { val: 'Silver Tongue', det: '+Tier on Saves to persuade/woo/negotiate with intelligent creatures.' },
+      { val: 'Elidra\'s Melody', det: '1x/adv, play/sing to calm hostile creature. 1 turn no ATK, or reroll Reaction roll.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Gnome ──
+  {
+    name: 'Gnome',
+    hpBase: 4,
+    atk: '+0',
+    def: '+1/2L',
+    startingGold: { count: 4, sides: 6 },
+    startingGear: [
+      { val: 'Light weapon', det: '' },
+      { val: 'Contraption', det: 'Used to study chosen illusionist spell.' },
+      { val: 'Lockpicks & precision tools', det: 'Resale: 15gp.' },
+    ],
+    spells: [
+      { val: 'Illusionist Spell (choose 1)', det: 'L spell slots. Cast chosen spell at +L. Other scrolls/items as L1 caster (+L if Illusion/Phantasmal/Illusionary name).' },
+      { val: 'Gadget: Ranged Weapon', det: '1 gadget pt. +L single ranged ATK. Disabled until 1pt + 30min repair.' },
+      { val: 'Gadget: Open/Disarm', det: '1+ gadget pts. Open lock/chest or disarm Trap. Save vs L (default 6) +gnome L +extra pts spent.' },
+      { val: 'Gadget: Free Restraints', det: '1 gadget pt. Free someone from chains/ropes/shackles. Save vs L6 (or Foe L) +L. Roll 1 = beyond ability.' },
+      { val: 'Gadget: Smokescreen', det: '1 gadget pt. Party flees without ATKs. Not vs fire/smoke/air/fire elementals/djinn. Ally use: 2-in-6 fail.' },
+      { val: 'Gadget: Portable Door', det: '1 gadget pt. Add door where none exists, or door<->opening, or lock a door.' },
+      { val: 'Gadget: Grenade', det: '2-5 gadget pts. Dmg = pts-1 (max 4). 1 turn to throw. Ranged if not surprised. In melee: hits party too (each PC rolls d6 dmg, max = pts spent or 4). Auto-kill Minor Foes, dmg Major.' },
+      { val: 'Gadget: Enhanced Weapon', det: '1 gadget pt. +L melee ATK for encounter. Immune to disarm. Not lendable.' },
+      { val: 'Gadget: Clockwork Armor', det: '1 gadget pt. Light armor, +3 DEF until end of encounter. Build for 25gp. Counts as 2 items vs Gremlins.' },
+    ],
+    abilities: [
+      { val: 'Gadget Points: L+6', det: 'Per adventure.' },
+      { val: '+1/2L DEF', det: '' },
+      { val: '+L vs poison/gases', det: 'Save bonus.' },
+      { val: '+L disarm Traps', det: '' },
+      { val: 'Light armor + leafsteel + clockwork', det: '' },
+      { val: 'Light weapons, sling, hand weapon, bow, handgun', det: '' },
+      { val: 'Saves as Rogue', det: '' },
+    ],
+    traits: [
+      { val: 'Fixer', det: 'L+8 (not L+6) gadget points.' },
+      { val: 'Illusionist\'s Trick', det: '1x/adv, cast extra illusionist spell (any from list) without spell slot.' },
+      { val: 'Clockwork Armor Specialist', det: '+1 DEF vs first ATK in every combat when wearing clockwork armor (even without spending gadget pts).' },
+      { val: 'Trap Expert', det: '+Tier on disarm Trap/lockpicking Saves (even with gadget pts).' },
+      { val: 'Keen Nose', det: '+2 Saves vs gases. 1x/adv, prevent surprise (use after surprise roll).' },
+      { val: 'Clockwork Grenadier', det: '1x/adv, throw grenade (2 dmg) as ranged if not surprised. In melee: all Save vs L4 or lose 1 Life.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Halfling ──
+  {
+    name: 'Halfling',
+    hpBase: 3,
+    atk: '+0',
+    def: '+0',
+    startingGold: { count: 2, sides: 6 },
+    startingGear: [
+      { val: 'Sling', det: '' },
+      { val: 'Light weapon', det: '' },
+    ],
+    startingRationsDice: { count: 1, sides: 6, bonus: 3 },
+    spells: [
+      { val: 'Luck', det: 'L+1 pts/adv. Spend 1 to: flee melee without ATK, reroll ATK/DEF/Save/Search/Treasure/Magic Treasure roll. Refresh between adventures.' },
+      { val: 'Nourishing Meal', det: '1x/adv when Resting. Use 1 Food ration per ally. Each eater heals 1 Life (+ resting Life). Halflings also recover 1 Madness.' },
+    ],
+    abilities: [
+      { val: '+L DEF vs giants/trolls/ogres/half-giants', det: '' },
+      { val: '+L ATK with slings', det: '' },
+      { val: 'Stealth +L', det: '' },
+      { val: 'Light armor only', det: '' },
+      { val: 'Light weapon + sling', det: '' },
+      { val: 'Magic use', det: 'Standard scroll/non-restricted magic item use.' },
+      { val: 'Saves as Halfling', det: '' },
+    ],
+    traits: [
+      { val: 'Lucky Sidestep', det: '1x/adv/L, reroll failed Save. If Save already allows halfling reroll, roll twice pick best.' },
+      { val: 'Nimble Dodge', det: '+1 DEF rolls.' },
+      { val: 'Sling Skill', det: '+Tier ATK with slings.' },
+      { val: 'Iron Stomach', det: 'Immune to ingested poison. +Tier Saves vs poison/gases. +1 Life at creation.' },
+      { val: 'Fungi Forager', det: '1x/adv near mushrooms: 3d6gp specimen, OR extra Nourishing Meal, OR d6 Life healing, OR double Food rations found.' },
+      { val: 'Comforting Cook', det: 'When Resting, you + 1 ally recover 1 extra Life. Costs 1 Food ration. Stacks with Nourishing Meal.' },
+    ],
+    traitCount: 2,
+  },
+
+  // ── Illusionist ──
+  {
+    name: 'Illusionist',
+    hpBase: 2,
+    atk: '+0',
+    def: '+0',
+    startingGold: { count: 3, sides: 6 },
+    startingGear: [
+      { val: 'Knife or walking stick', det: 'Light weapon.' },
+      { val: 'Clothes', det: '' },
+    ],
+    spells: [
+      { val: 'Distracting Lights', det: 'Free (no slot). 1 turn + spellcasting vs Foe L. Reduce Foe L by Tier for encounter. Not vs undead/artificial/elemental. Not cumulative. Fail = no retry. Needs free hand.' },
+      { val: 'Illusionary Knife Throw', det: '1 slot. Create + throw knife at +Tier+L. No -1 light penalty. May do Subdual ignoring -1 mod.' },
+      { val: 'Illusionary Armor', det: '+Tier DEF until end of encounter. Not vs Foes immune to illusions (vermin/undead/artificial/elemental).' },
+      { val: 'Illusionary Mirror Image', det: 'Create Tier+1 copies. Each absorbs 1 ATK (any dmg). Auto-hit, no DEF. Destroyed by area ATKs. Gone if you move/cast Disbelief.' },
+      { val: 'Phantasmal Terror', det: 'Spellcasting vs Foe L. On hit: Foes must test Morale or flee. Works only on living Foes. Foes immune to fear/illusions unaffected.' },
+      { val: 'Disbelief', det: 'Auto-dispel any illusion, phantasm, glamour. Also reveals invisible/hidden. Reveals true nature of disguised/shapeshifted creatures.' },
+      { val: 'Phantasmal Binding', det: 'Spellcasting vs Foe L. Hold target Tier turns. +2 ATK on held Foe, all dmg may be Subdual. Not vs illusion-immune. Morale fail = surrender.' },
+      { val: 'Illusionary Fog', det: 'Free action before ranged/gaze ATKs. Suspends ranged/gaze ATKs & Search rolls while active. PCs fleeing +2 DEF. Lasts until illusionist leaves or dies.' },
+      { val: 'Glamour Mask', det: 'Change appearance (self or ally) for Tier hours. Visual only, not voice/touch. Reroll Reaction/Wooing Save, or impersonate authority.' },
+      { val: 'Shadow Strike', det: 'Spellcasting vs L. Tier Subdual dmg to Major Foe or group of Minors. Not vs illusion-immune.' },
+      { val: 'Specter Swarm', det: 'Conjure spectral swarm. Foes must test Morale or cannot ATK illusionist for encounter. Vanish vs illusion-immune. Morale-exempt Foes immune.' },
+      { val: 'Mirage of Fortune', det: 'Spellcasting vs Foe L. Success = immediate Bribe Reaction. Not vs Foes without Bribe/illusion-immune. Usable in combat.' },
+      { val: 'Illusionary Banquet', det: 'Create Tier+3 Food rations. Sustains living beings max 7 days. After 7 days without real food: 1 dmg per illusionary ration eaten.' },
+      { val: 'Illusionary Sword', det: 'Flaming sword for Tier+3 turns. +L ATK. Hits magic-only Foes. All dmg is Subdual.' },
+    ],
+    abilities: [
+      { val: 'Spell Slots: L+3', det: 'Illusionist spells only (+ any spell with Phantasm/Illusion/Glamour/Mirage/Phantasmal in name).' },
+      { val: '+L spellcasting', det: '' },
+      { val: 'Continual Light', det: 'Free lantern (on medallion/staff/hat). No hands, not blown out. Lasts until separated or dead.' },
+      { val: 'Stealth +1/2L', det: '' },
+      { val: 'No armor', det: '' },
+      { val: 'Light weapon + light ranged', det: '' },
+      { val: 'Magic use as Wizard', det: '' },
+      { val: 'Saves as Wizard', det: '' },
+    ],
+    lantern: true,
+    traits: [
+      { val: 'Phantom Reflex', det: '1x/combat, auto-miss from Foe ATK (illusionary double). Not vs artificial Foes seeing through illusions. Not while using Mirror Image.' },
+      { val: 'Glamour Specialist', det: '+Tier social/persuasion Saves with disguise-based illusions.' },
+      { val: 'Misdirection', det: '1x/adv, Foe ATKs phantom instead of ally. Phantom DEF = your L. Continues until phantom hit or dispelled. Not vs illusion-immune.' },
+      { val: 'Shadow Adept', det: '+Tier spellcasting roll on Shadow Strike. Treat as magical dmg vs non-illusion-immune.' },
+      { val: 'Hazy Veil', det: '1x/adv, +Tier DEF until end of encounter. Not cumulative with other illusion DEF effects.' },
+      { val: 'Spectral Trickster', det: '1x/adv, after casting illusion spell: flee melee free to last tile, OR stay and free melee ATK at +Tier. Not vs illusion-immune/invisible-seeing.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Kukla ──
+  {
+    name: 'Kukla',
+    hpBase: 5,
+    atk: '+1',
+    def: '+1/2L',
+    startingGold: { count: 3, sides: 6 },
+    startingGear: [
+      { val: 'Dagger', det: 'Light slashing weapon.' },
+      { val: 'Doll clothes', det: '' },
+      { val: 'Green Ring', det: '5gp resale. Revive dead kukla (1x lifetime, wizard/alchemist pours liquid, d6 turns to full Life).' },
+      { val: 'Red Ring', det: '5gp resale. 1x lifetime: auto-slay any PC/NPC/Foe that ate food bribe, had food Reaction, or bit kukla. Not vs poison-immune.' },
+    ],
+    spells: [
+      { val: 'Green Ring: Revive', det: '1x lifetime. Wizard/puppetmaster/alchemist revives dead kukla. 1 turn cast, d6 turns to regain all Life.' },
+      { val: 'Red Ring: Poison', det: '1x lifetime. Auto-slay target who accepted food bribe, food/drink Reaction, or bit kukla. Not vs poison-immune.' },
+    ],
+    abilities: [
+      { val: '+1 ATK light slashing', det: 'One-time +1, NOT per L.' },
+      { val: '+1/2L DEF', det: '' },
+      { val: 'Unarmed: -1 (not -2)', det: 'Claw/bite.' },
+      { val: 'Rare', det: 'Max 1 kukla per party.' },
+      { val: 'Artificial', det: 'Immune to poison, disease, stone, mind control/reading/blast, vampirism, energy drain, paralysis, lycanthropy. Madness still applies (exceeds L = lifeless). Metal gears immune to metal-destroyers.' },
+      { val: 'Secret Compartment', det: 'Hidden torso: knife + 5 rations + 10 small items + 100gp coins + any gems/jewels. Cannot be stolen while alive.' },
+      { val: 'Prehensile Hair', det: '+1/2L lockpicking. Extra hand for lantern/wand (not weapons). Can tie Foe like rope.' },
+      { val: 'Magical Nature', det: 'Unarmed ATKs are magical (hit magic-only targets).' },
+      { val: 'Unhealing', det: 'No healing/prayers/bandages/potions work. Repair between adventures at 1gp/Life. Spare parts (10gp each, count as treasure): 4 Life per part.' },
+      { val: 'No Smell/Taste', det: 'Auto-fail sense-based Saves.' },
+      { val: 'Social: +L with children', det: 'Cannot woo/seduce/be seduced.' },
+      { val: 'No armor', det: '' },
+      { val: 'Light weapon + light ranged', det: '' },
+      { val: 'Scroll use', det: 'Can cast from scrolls. Can use wizard-restricted magic items.' },
+      { val: 'Saves as Rogue', det: '' },
+      { val: 'Stealth +1/2L', det: '' },
+    ],
+    traits: [
+      { val: 'Hair Mastery', det: '1x/adv, disarm Trap/open lock with hair at +L (not +1/2L).' },
+      { val: 'Hidden Blade', det: '1x/encounter, draw knife from compartment as free action + surprise ATK at +Tier dmg.' },
+      { val: 'Unyielding Form', det: '1x/adv, ignore up to 2 dmg during single combat encounter.' },
+      { val: 'Creepy Charm', det: 'Reroll Reaction roll of any encounter with living Foes. Not vs undead/artificial/elemental/fixed-Reaction.' },
+      { val: 'Hair Bind', det: '1x/adv, restrain Foe 2 turns (-2L while held). Human-size or smaller only. Flee = release. Dmg can be Subdual.' },
+      { val: 'Clockwork Reflexes', det: 'Reroll all failed Trap Saves (avoid, not disarm) and DEF vs ranged ATKs.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Light Gladiator ──
+  {
+    name: 'Light Gladiator',
+    hpBase: 5,
+    atk: '+1/2L',
+    def: '+1/2L',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Two light weapons', det: '' },
+      { val: 'Rope', det: '' },
+      { val: 'Lantern', det: '' },
+    ],
+    lantern: true,
+    spells: [
+      { val: 'Parry & Counter-strike', det: '1x/combat. On Explosive DEF roll, add excess over Foe L to next ATK vs same Foe. May decide after rolling DEF.' },
+    ],
+    abilities: [
+      { val: '+1/2L ATK light weapons only', det: 'Other weapons = light weapon stats (-1 ATK).' },
+      { val: '+1/2L DEF', det: '' },
+      { val: 'Two Weapon Fighting', det: '2 ATK rolls/turn in melee (light weapon each hand). Both can Explode. OR forgo 1 ATK to parry: +1 DEF (not vs ranged).' },
+      { val: 'Gladiator (L3 free)', det: '+1 ATK/DEF in Trial of Champions fights.' },
+      { val: 'Light armor + leafsteel', det: '' },
+      { val: 'Light hand weapons ONLY', det: '' },
+      { val: 'Saves as Warrior or Rogue', det: 'Case-by-case.' },
+      { val: 'Scroll use as L1 wizard', det: '' },
+      { val: 'Magic items as Warrior', det: '' },
+    ],
+    traits: [
+      { val: 'Blade Mastery', det: '1x/combat, reroll failed melee ATK.' },
+      { val: 'Quick Feint', det: '1x/adv, forgo 1 ATK to reduce Foe L by 2 for your next ATK (min L1).' },
+      { val: 'Arena Reflexes', det: '1x/combat, after successful DEF, flee melee without ATK.' },
+      { val: 'Nimble Step', det: '+Tier Saves vs Traps and area dangers (anything hitting 2+ PCs).' },
+      { val: 'Twin Strike Precision', det: 'If both ATK rolls hit same Foe in your turn, +1 extra dmg.' },
+      { val: 'Opportunist', det: '1x/combat, on successful DEF, free off-hand ATK vs Foe (in Foe\'s turn).' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Mushroom Monk ──
+  {
+    name: 'Mushroom Monk',
+    hpBase: 4,
+    atk: '+L',
+    def: '+1/2L',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Sash', det: '' },
+      { val: 'Bo or nunchaku or 12 throwing stars', det: 'Bo/nunchaku = crushing hand weapon. Stars = light ranged.' },
+    ],
+    spells: [
+      { val: 'Spores', det: 'Tier x/adv. 1 turn. -1L to all living Minor Foes (not fungal/unliving). Allies protected. Not cumulative in same encounter.' },
+      { val: 'Hyphae', det: '1x/adv. Fungal grottoes/wilderness only. 1 turn. Choose: reduce surprise chance by 1, OR gain 1 Clue, OR auto-Save vs illusion/see shapeshifter.' },
+    ],
+    abilities: [
+      { val: '+L ATK monk weapons', det: 'Nunchaku, bo, sai, unarmed, throwing stars. +1/2L with other weapons.' },
+      { val: '+1/2L DEF', det: '' },
+      { val: 'Flurry of Blows', det: 'Tier ATKs/turn if unarmed/stars/nunchaku. 1 ATK with other weapons. Not cumulative with multi-ATK effects.' },
+      { val: 'Martial Arts', det: 'Unarmed = light weapon (-1 not -2). At L5+ = hand weapon (no mod).' },
+      { val: 'Rare', det: 'Max 1 mushroom monk per party.' },
+      { val: 'Immunities', det: 'Immune to poison/sleep from mushroom/fungal creatures.' },
+      { val: 'Tasty', det: 'If dead, allies make d6 Food rations. Respectful. If eaten, cannot resurrect.' },
+      { val: 'Self Sustenance', det: 'No food/water needed if organic matter available.' },
+      { val: 'Saves as Cleric', det: '+L to escape restraints/chains/ropes/nets/webs/snares.' },
+      { val: 'Scroll use as L1 caster', det: '' },
+      { val: 'No armor', det: '' },
+      { val: 'All weapons except firearms', det: '' },
+      { val: 'Stealth +1/2L', det: '' },
+    ],
+    traits: [
+      { val: 'Abundant Spores', det: '+1 extra Spores use per adventure.' },
+      { val: 'High Kicks', det: 'Kick ATKs have no -1 unarmed mod. Roll 1 = lose balance, spend next turn standing.' },
+      { val: 'Poisonous Flesh', det: '1x/combat, if bitten by living Foe, 1 dmg 2 turns later. Body inedible (except goblins/ogres).' },
+      { val: 'Fruitful', det: '1x/adv, body generates d3 Food rations.' },
+      { val: 'Slow Regeneration', det: 'Recover 1 Life/adventure (in addition to healing/resting).' },
+      { val: 'Tough Cap', det: 'Fungal cap acts as shield: +1 DEF. If dead, allies craft non-metallic shield.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Paladin ──
+  {
+    name: 'Paladin',
+    hpBase: 6,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 1, sides: 6 },
+    startingGear: [
+      { val: 'Heavy armor', det: '' },
+      { val: 'Shield', det: '' },
+      { val: 'Hand weapon', det: 'May trade shield+hand weapon for 2H weapon.' },
+    ],
+    spells: [
+      { val: 'Prayer: Heal', det: 'L+1 prayer pts total. Spend any number to heal that many Life on self/ally.' },
+      { val: 'Prayer: Reroll Save', det: '1 prayer pt. Reroll failed Save. Rerolls may not be rerolled.' },
+      { val: 'Prayer: Summon Steed', det: '1 prayer pt. Outdoors only, not in combat. Mounted = +1 ATK vs non-mounted Foes (if not surprised). No Netherworld/demonic planes.' },
+    ],
+    abilities: [
+      { val: '+L ATK', det: '' },
+      { val: 'Tithe', det: 'After adventure, pay Lx10gp or all gems/gold. Never flees combat. Won\'t leave until mission complete (unless all PCs <1/2 Life & no healing).' },
+      { val: 'Heavy armor + shield', det: '' },
+      { val: 'Any weapons except firearms', det: '' },
+      { val: 'Magic items as Warrior', det: '' },
+      { val: 'Stealth: no bonus', det: '' },
+    ],
+    traits: [
+      { val: 'Armor Mastery', det: '1x/combat, reduce physical dmg by 1 while in heavy armor (can reach 0).' },
+      { val: 'Mounted Fighter', det: '+Tier ATK while mounted (stacks with standard +1 mounted bonus).' },
+      { val: 'Challenge', det: 'Force Foe to target you for entire combat (even if Hates ally or random target). Must champion Trial of Champions.' },
+      { val: 'Oathbound', det: '+L Save vs forced ally-ATK or forced flee. If already unaffected, pass bonus to ally.' },
+      { val: 'Shield Wall', det: 'If you + adjacent ally both have shields, both +1 DEF. Adjacent = pos 1&2 or 3&4.' },
+      { val: 'Encouraging Presence', det: 'All allies +Tier Save vs Fear/Terror/Madness while you lead Marching Order.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Ranger ──
+  {
+    name: 'Ranger',
+    hpBase: 6,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 2, sides: 6 },
+    startingGear: [
+      { val: 'Hand weapon x2', det: 'Choose: blunt or slashing.' },
+      { val: 'Light weapon', det: '' },
+      { val: 'Bow', det: '' },
+      { val: 'Light armor', det: '' },
+    ],
+    startingRationsDice: { count: 1, sides: 3 },
+    spells: [],
+    abilities: [
+      { val: '+L ATK', det: '' },
+      { val: 'Dual wield', det: '2 melee ATKs at +1/2L each (no Explosion). Same weapon type or sword+dagger combo.' },
+      { val: 'Double bow (outdoors)', det: '2 ranged ATKs at +1/2L each (no Explosion). Not cumulative with other multi-ATK.' },
+      { val: 'Sworn Enemy', det: 'Choose 1 at L1 (kobolds/orcs/goblins/vampires/werewolves/hyena-men/trolls/ogres/chaos/catfolk/dragons/lizardmen/serpentfolk/mushroom men). Higher Tier die vs sworn enemy. Add more with XP rolls.' },
+      { val: 'Tracking', det: 'Reduce Clues needed to find/hunt a Foe by 1. Not cumulative.' },
+      { val: 'Boss Tracking', det: '1x/adv, reroll Final Boss determination roll (even successful).' },
+      { val: 'Stealth +L outdoor, +1/2L indoor', det: '' },
+      { val: '+L Climbing/Tracking/Swimming Saves', det: 'Always, even if not described.' },
+      { val: 'Shield + light armor', det: '' },
+      { val: 'Light/hand weapons, bows, slings', det: 'No 2H melee or firearms.' },
+      { val: 'Magic items as Warrior + 1 druid', det: 'Choose druid item when found (permanent).' },
+      { val: 'Scroll use as L1 caster', det: 'Druid scroll: XP roll to learn, use 1x/adv. Max 1 druid spell.' },
+      { val: 'Saves as Warrior', det: '' },
+    ],
+    traits: [
+      { val: 'Deadeye', det: '+1 ranged ATK with bows/crossbows.' },
+      { val: 'Track Master', det: 'Save +L vs Foe L to ignore Wandering Monster surprise. Encounter still happens, party acts first.' },
+      { val: 'Forager', det: '1x/adv, auto-find 4 Rations OR healing herbs/mushrooms for d6 Life (distribute as desired).' },
+      { val: 'Beast Whisperer', det: 'Alter Reaction rolls of wild animals by 2. Animal tag only.' },
+      { val: 'Snare Master', det: '1x/adv, auto-disarm outdoor Trap (may use after determining effect).' },
+      { val: 'Stealth Master', det: '+Tier Stealth Saves outdoors.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Rogue ──
+  {
+    name: 'Rogue',
+    hpBase: 3,
+    atk: '+0',
+    def: '+L',
+    startingGold: { count: 3, sides: 6 },
+    startingGear: [
+      { val: 'Light armor', det: '' },
+      { val: 'Light weapon', det: '' },
+      { val: 'Rope', det: '' },
+      { val: 'Lockpicks', det: '' },
+    ],
+    spells: [],
+    abilities: [
+      { val: '+L DEF', det: '' },
+      { val: '+L ATK vs outnumbered Minor Foes', det: 'When PCs outnumber Foes (e.g. 4 PCs vs 3 orcs).' },
+      { val: '+L Saves vs Traps', det: '' },
+      { val: '+L lockpick doors', det: '' },
+      { val: 'Stealth +L', det: '' },
+      { val: 'Light armor only', det: '' },
+      { val: 'Light weapons + sling', det: '' },
+      { val: 'Magic items: any not forbidden', det: '' },
+      { val: 'Scroll use as L1 caster', det: '' },
+      { val: 'Saves as Rogue', det: '' },
+    ],
+    traits: [
+      { val: 'Knife Fighter', det: '+Tier ATK with daggers/throwing knives.' },
+      { val: 'Evasion', det: '1x/adv, auto-succeed Save to avoid dmg or undesirable effect (e.g. turned to stone).' },
+      { val: 'Shadow-walker', det: '+Tier Stealth rolls.' },
+      { val: 'Delicate Touch', det: '+Tier lockpicking/Trap disarm Saves.' },
+      { val: 'Street Thug', det: '+1 Life. May use hand weapons. Start with one (choose slashing or blunt).' },
+      { val: 'Backstabber', det: '+L ATK bonus vs outnumbered Foes applies to Major Foes too.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Swashbuckler ──
+  {
+    name: 'Swashbuckler',
+    hpBase: 4,
+    atk: '+1/2L',
+    def: '+1/2L',
+    startingGold: { count: 2, sides: 6 },
+    startingGear: [
+      { val: 'Hand weapon', det: '' },
+      { val: 'Light hand weapon', det: '' },
+      { val: 'Plumed cavalier hat or tricorn cap', det: '' },
+      { val: 'Half-cape', det: '' },
+    ],
+    spells: [
+      { val: 'Panache', det: 'Earn 1 pt per Foe killed (max L pts). Spend 1 pt for +1 ATK or DEF on next roll. Max 1 pt per roll.' },
+    ],
+    abilities: [
+      { val: '+1/2L ATK + DEF', det: '' },
+      { val: 'Two Attacks/turn', det: 'Hand weapon (main) + light weapon (off-hand).' },
+      { val: 'No armor', det: '' },
+      { val: 'Light weapon + hand weapon + sling + firearms', det: '' },
+      { val: 'Magic items: any not restricted', det: '' },
+      { val: 'Scroll use as L1 caster', det: '' },
+      { val: 'Saves as Rogue', det: '' },
+      { val: 'Stealth +1/2L', det: '' },
+    ],
+    traits: [
+      { val: 'Flourishing Strike', det: '1x/combat, after successful ATK, free second off-hand ATK.' },
+      { val: 'Daring Escape', det: '1x/adv, disengage from melee without ATK. Ally gets +1 next ATK vs chosen Foe.' },
+      { val: 'Riposte', det: '1x/combat, if Foe misses in melee, counterattack with off-hand (in Foe\'s turn).' },
+      { val: 'Lucky Hat', det: '1x/adv, reroll failed DEF at +1. Reroll 1 = hat destroyed (replace 6gp in settlement).' },
+      { val: 'Taunt', det: '1x/combat, -Tier on Foe L next turn (min 1). Not vs Weird/Unliving (but works on vampires).' },
+      { val: 'Blade Dance', det: '1x/adv, spend any panache pts for +1 per pt to next ATK + DEF rolls. Unused DEF bonus lost at end of combat.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Warrior ──
+  {
+    name: 'Warrior',
+    hpBase: 6,
+    atk: '+L',
+    def: '+0',
+    startingGold: { count: 2, sides: 6 },
+    startingGear: [
+      { val: 'Light armor', det: '' },
+      { val: 'Shield + hand weapon OR two-handed weapon OR bow', det: '' },
+    ],
+    spells: [],
+    abilities: [
+      { val: '+L ATK', det: 'All melee and ranged weapons.' },
+      { val: 'Any armor', det: '' },
+      { val: 'Any weapons', det: '' },
+      { val: 'Magic items: any not forbidden', det: '' },
+      { val: 'Scroll use as L1 caster', det: '' },
+      { val: 'Saves as Warrior', det: '' },
+      { val: 'Stealth: no modifier', det: '' },
+    ],
+    traits: [
+      { val: 'Good Shot', det: '+1 ATK with ranged weapons.' },
+      { val: 'Shield Expert', det: '1x/adv with shield, reduce ATK dmg by 1 (can reach 0).' },
+      { val: 'Power Strike', det: '1x/adv, +1 dmg on one ATK. Use after rolling.' },
+      { val: 'Intuitive Team Tactics', det: '1x/combat, +1 to ally\'s DEF or ATK roll. Not if party was surprised.' },
+      { val: 'Tight Guard', det: '+1 DEF vs first ATK targeting you in every combat.' },
+      { val: 'Sword/Mace Training', det: 'Choose blunt or slashing hand weapon. +Tier ATK with that weapon.' },
+    ],
+    traitCount: 1,
+  },
+
+  // ── Wizard ──
+  {
+    name: 'Wizard',
+    hpBase: 2,
+    atk: '+0',
+    def: '+0',
+    startingGold: { count: 4, sides: 6 },
+    startingGear: [
+      { val: 'Light weapon', det: 'Stick or dagger.' },
+      { val: 'Spellbook', det: '' },
+      { val: 'Writing implements', det: '' },
+    ],
+    spells: [
+      { val: 'Blessing', det: 'Remove curse/condition (e.g. turned to stone). Auto-success. Not usable by Elves.' },
+      { val: 'Escape', det: 'Auto-teleport to first tile. Cast instead of DEF roll or on your turn.' },
+      { val: 'Lightning', det: 'Spellcasting vs Foe L. 2 dmg to Major Foe, slay 1 Minor. No effect on electricity-immune.' },
+      { val: 'Fireball', det: 'Ranged ATK at +L. 1 dmg Major Foe. Minors: ATK roll - Foe L killed (min 1). No effect on fire dragons. Fire-susceptible: auto-slay/extra dmg/+bonus.' },
+      { val: 'Protection', det: 'Auto, +1 DEF on self or ally until end of encounter.' },
+      { val: 'Sleep', det: 'Spellcasting vs L. Target sleeps (subdue or slay). Not vs dragons/unliving/L11+. 1 Major or d6+L Minors.' },
+    ],
+    abilities: [
+      { val: 'Spell Slots: L+2', det: 'Choose spells before adventure. May have duplicates. 1 slot recovered when Resting.' },
+      { val: '+L spellcasting', det: 'Also from scrolls.' },
+      { val: '+L Saves vs puzzles/magic', det: '' },
+      { val: 'Spell Burning', det: 'No slots left: cast from spellbook (page burns). Spell removed until 1 XP spent to relearn or found on scroll.' },
+      { val: 'No armor', det: '' },
+      { val: 'Light weapon + sling', det: '' },
+      { val: 'Magic items: any unless class/weapon restricted', det: '' },
+      { val: 'Saves as Wizard', det: '' },
+    ],
+    traits: [
+      { val: 'Arcane Memory', det: '+1 additional spell slot.' },
+      { val: 'Keen Observer', det: '+1 Search rolls.' },
+      { val: 'Spell Efficiency', det: '1x/adv, cast spell without removing from slot.' },
+      { val: 'Sygilist', det: '+Tier spellcasting from scrolls/inscriptions.' },
+      { val: 'Scrapper', det: '+1 DEF. Ignore -1 ATK with chosen light weapon (stick or dagger).' },
+      { val: 'Specialist', det: 'Choose Lightning, Sleep, or Fireball. +Tier spellcasting with that spell.' },
+    ],
+    traitCount: 1,
+  },
+]
