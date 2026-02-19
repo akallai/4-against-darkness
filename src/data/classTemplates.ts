@@ -9,8 +9,8 @@ export interface DiceExpression {
 export interface ClassTemplate {
   name: string
   hpBase: number
-  atk: string
-  def: string
+  atk: '+0' | '+1' | '+L' | '+1/2L'
+  def: '+0' | '+1' | '+L' | '+1/2L'
   startingGold: DiceExpression
   startingGear: ListItem[]
   spells: ListItem[]

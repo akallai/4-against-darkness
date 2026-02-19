@@ -1,15 +1,17 @@
 import type { Character } from '@/types'
+import type { ClassTemplate } from '@/data/classTemplates'
 import { CLASS_TEMPLATES } from '@/data/classTemplates'
 import { rollDice } from '@/utils/dice'
 
 export const CLASS_NAMES = CLASS_TEMPLATES.map((t) => t.name)
 
-function resolveBonus(formula: string, level: number): string {
-  if (formula === '+0') return '+0'
-  if (formula === '+1') return '+1'
-  if (formula === '+L') return `+${level}`
-  if (formula === '+1/2L') return `+${Math.floor(level / 2)}`
-  return formula
+function resolveBonus(formula: ClassTemplate['atk'], level: number): string {
+  switch (formula) {
+    case '+0': return '+0'
+    case '+1': return '+1'
+    case '+L': return `+${level}`
+    case '+1/2L': return `+${Math.floor(level / 2)}`
+  }
 }
 
 export function applyClassTemplate(className: string, level = 1): Partial<Character> | undefined {

@@ -130,6 +130,31 @@ describe('applyClassTemplate', () => {
     expect(CLASS_NAMES).toContain('Mushroom Monk')
   })
 
+  it('sets lvl on result', () => {
+    const result = applyClassTemplate('Warrior')!
+    expect(result.lvl).toBe(1)
+  })
+
+  it('computes L3 HP for Warrior (base 6 → 9/9)', () => {
+    const result = applyClassTemplate('Warrior', 3)!
+    expect(result.hp).toBe('9/9')
+  })
+
+  it('resolves +L ATK at L3 to +3', () => {
+    const result = applyClassTemplate('Warrior', 3)!
+    expect(result.atk).toBe('+3')
+  })
+
+  it('resolves +1/2L ATK at L3 to +1', () => {
+    const result = applyClassTemplate('Cleric', 3)!
+    expect(result.atk).toBe('+1')
+  })
+
+  it('populates empty spells array for Warrior', () => {
+    const result = applyClassTemplate('Warrior')!
+    expect(result.spells).toEqual([])
+  })
+
   it('every class produces a valid result', () => {
     for (const name of CLASS_NAMES) {
       const result = applyClassTemplate(name)!
